@@ -1,10 +1,12 @@
 "use client"
+import dynamic from 'next/dynamic'
 
-import Topbar from '@/components/Topbar';
+import Topbar from '@/components/Topbar'
 
-import SendMoneyLog from '@/components/dashboard/SendMoneyLog/SendMoneyLog';
-import TotalTransactionsChart from '@/components/dashboard/TotalTransactionsChart/TotalTransactionsChart';
-import Wallet from '@/components/dashboard/Wallet/Wallet';
+import TotalTransactionsChart from '@/components/dashboard/TotalTransactionsChart/TotalTransactionsChart'
+import SendMoneyLog from '@/components/dashboard/SendMoneyLog/SendMoneyLog'
+import Wallet from '@/components/dashboard/Wallet/Wallet'
+import { decodedUser } from '@/components/hooks/useUser'
 
 
 // const Page = () => {
@@ -40,23 +42,23 @@ import Wallet from '@/components/dashboard/Wallet/Wallet';
 
 const Page = () => {
     return (
-        <div className='min-h-[calc(100vh-100px)]'>
+        <div className='min-h-screen max-h-full'>
             <Topbar>Dashboard</Topbar>
-            <div className='grid grid-cols-12 gap-5 mt-2 lg:mt-8 w-full lg:pb-5'>
+            <div className='grid lg:grid-cols-5 lg:gap-5 mt-8 w-full '>
                 {/* First column */}
-                <div className='xl:col-span-7 lg:col-span-6 col-span-12 space-y-8'>
-
-                    <div className='w-full'>
+                <div className='lg:col-span-3 grid lg:grid-rows-2 lg:gap-5'>
+                    
+                    <div className='w-full h-fit'>
                         <Wallet />
                     </div>
-
-                    <div className='w-full mt-0 md:mt-5 lg:mt-0 lg:h-[50vh] '>
+                    
+                    <div className='w-full h-fit mt-0 md:mt-5 lg:mt-0'>
                         <TotalTransactionsChart />
                     </div>
                 </div>
 
                 {/* Second column */}
-                <div className='xl:col-span-5 lg:col-span-6 col-span-12 w-full mt-5 lg:mt-0'>
+                <div className='lg:col-span-2 row-span-2 w-full mt-5 lg:mt-0'>
                     <SendMoneyLog />
                 </div>
             </div>

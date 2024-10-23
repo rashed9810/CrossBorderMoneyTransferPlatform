@@ -1,20 +1,16 @@
 "use client";
-import useAxiosSecure from "@/components/hooks/useAxiosSecure";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import SocialLogin from "./SocialLogin";
-
-import useAuthContext from "@/components/AuthContext/useAuthContext";
-import useNavigationContext from "@/components/NavigationContext/useNavigationContext";
-import LoadingSpinner from "@/components/common/Loading/LoadingSpinner";
-import Cookies from 'js-cookie';
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { LiaEyeSlashSolid, LiaEyeSolid } from "react-icons/lia";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+import SocialLogin from "./SocialLogin";
+import useAxiosSecure from "@/components/hooks/useAxiosSecure";
+
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+import useAuthContext from "@/components/AuthContext/useAuthContext";
+import Link from "next/link";
+import useNavigationContext from "@/components/NavigationContext/useNavigationContext";
 
 
 
@@ -24,14 +20,13 @@ interface FormData {
 }
 
 const LoginForm = () => {
-  const { setOpenForgetPassword }: any = useNavigationContext();
+  const {setOpenForgetPassword} : any = useNavigationContext();
   const [serverError, setServerError] = useState('');
   const { user, setUser, loading, setLoading }: any = useAuthContext();
   const axiosInstance = useAxiosSecure();
   const router = useRouter();
-  // const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -51,16 +46,13 @@ const LoginForm = () => {
       const res = await axiosInstance.post('/auth/login', userInfo);
 
       if (res.status === 200) {
-        const userData = res?.data?.data?.user;
+        const userData = res?.data?.data?.data;
         setUser(userData);
 
-        const { accessToken, refreshToken } = res?.data?.data;
-        Cookies.set('accessToken', accessToken);
-        Cookies.set('refreshToken', refreshToken);
-        Cookies.set('name', userData?.name, { secure: false, sameSite: 'none' });
+        // toast.success(res?.data?.data.message);
+        toast("You have successfully logged in");
 
         router.push('/user/dashboard');
-        toast.success("You have successfully logged in");
         setLoading(false)
 
         // window.location.href = '/user/dashboard';
@@ -74,21 +66,15 @@ const LoginForm = () => {
     } catch (error: any) {
       if (error.response && error.response.status === 403) {
         setServerError("Invalid email or password");
-        toast.error("Invalid email or password");
       }
       else if (error.response.status === 404) {
         setServerError("Invalid email or password");
-        toast.error("Invalid email or password");
-      } else {
-        toast.error(error.message);
       }
-      setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg px-6 py-6 my-10 lg-my-0 max-w-xl w-full mx-auto">
-      <h3 className="text-black  font-semibold pb-5">Login</h3>
+    <div className="bg-white rounded-xl shadow-lg px-2 lg:px-6 py-6 my-10 lg-my-0 max-w-xl w-full">
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Email Field */}
         <div className="mb-4">
@@ -102,7 +88,7 @@ const LoginForm = () => {
               //   message: "Custom error: Enter a valid email address",
               // },
             })}
-            className={`border border-gray-300 text-gray-900 text-sm rounded-xl block w-full p-2.5 dark:border-gray-600 focus:outline-none bg-white mt-1 font-medium`}
+            className={`border border-gray-300 text-gray-900 text-sm rounded-xl block w-full p-2.5 dark:border-gray-600 focus:outline-none bg-white mt-1`}
             placeholder="name@gmail.com"
           />
           {/* {error && (
@@ -126,7 +112,7 @@ const LoginForm = () => {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute top-3 right-4 text-lg"
+              className="absolute top-3 right-4 text-xl"
             >
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </button>
@@ -138,11 +124,11 @@ const LoginForm = () => {
           )}
 
           <div className="flex justify-end">
-            <Link href={'/auth/forget-password'}>
-              <p className="text-end text-[#723EEB] text-xs font-medium cursor-pointer py-4">
+            <div>
+              <p onClick={() => setOpenForgetPassword(true)} className="text-end text-[#723EEB] text-xs font-medium cursor-pointer py-4">
                 Forget Password?
               </p>
-            </Link>
+            </div>
           </div>
         </div>
 
@@ -152,10 +138,7 @@ const LoginForm = () => {
             type="submit"
             className="w-full md:px-4 py-2.5 bg-[#723EEB] text-white text-xs rounded-3xl hover:bg-[#6129e6] duration-500"
           >
-            {
-              loading ? <LoadingSpinner className="h-3 w-3" /> : 'Login'
-            }
-            {/* Login */}
+            Login
           </button>
         </div>
       </form>

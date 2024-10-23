@@ -1,20 +1,24 @@
 "use client"
 import Topbar from '@/components/Topbar'
 // import TransactionsPage from '../user/transactions/transactionsPage/transactionsPage'
-import CardSubTitle from '@/components/common/cardSubTitle/CardSubTitle'
+import SearchBox from '@/components/TransactionLog/SearchBox/SearchBox'
 import TransactionsPage from './transactionsPage/transactionsPage'
+import CardSubTitle from '@/components/common/cardSubTitle/CardSubTitle'
+
+
 
 
 const page = () => {
     return (
-        <div className='min-h-full'>
+        <div className=''>
             <Topbar>Transactions</Topbar>
             {/* <div className='absolute top-7 right-56'>
                 <SearchBox/>
             </div> */}
-            <CardSubTitle fontSize='1rem' title='Transactions Log' />
-            <TransactionsPage />
-
+            <CardSubTitle title='Transactions Log' />
+            <div className='my-5 overflow-hidden'>
+                <TransactionsPage />
+            </div>
         </div>
     )
 }

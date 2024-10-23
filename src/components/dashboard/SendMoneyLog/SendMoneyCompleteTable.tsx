@@ -1,4 +1,5 @@
 import { sendMoneyCompleteTableData } from '@/utils/data/sendMoneyCompleteTableData';
+import React from 'react';
 
 const SendMoneyCompleteTable = () => {
 
@@ -9,7 +10,7 @@ const SendMoneyCompleteTable = () => {
                     <div key={data.id} className='bg-gray-100 rounded-2xl p-4 mt-10'>
                         <div className=''>
                             {/* 1st row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center text-xs pb-2 '>
+                            <p className='border-b border-black flex flex-row justify-between items-center text-xs pb-2 '>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full p-1'>
                                         <svg width="14" height="15" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,21 +20,21 @@ const SendMoneyCompleteTable = () => {
                                     <p>Name</p>
                                 </div>
                                 <p >{data.name}</p>
-                            </div>
+                            </p>
                             {/* 2nd row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600  rounded-full flex justify-center items-center w-5 h-5 '>
-                                        <svg width="12" height="12" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="12" height="12" viewBox="00 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M5.5 0.5C2.74284 0.5 0.5 2.74284 0.5 5.5C0.5 8.25716 2.74284 10.5 5.5 10.5C8.25716 10.5 10.5 8.25716 10.5 5.5C10.5 2.74284 8.25716 0.5 5.5 0.5ZM5.5 1.33333C6.32031 1.33333 7.08203 1.57747 7.72656 1.98438L7.38802 2.02344L7.46615 2.85677L7.02344 2.66146L6.65885 2.97396L6.72396 3.83333L7.6224 3.54688L8.74219 3.91146L8.45573 4.43229L7.77865 4.01562L7.04948 4.11979L6.33333 4.65365L5.92969 5.90365L6.73698 6.56771C6.73698 6.56771 7.56543 6.42448 7.60938 6.42448C7.65332 6.42448 7.96094 7.17969 7.96094 7.17969L7.29688 9.26302C6.75488 9.52181 6.1429 9.66667 5.5 9.66667C5.36816 9.66667 5.23796 9.65202 5.10938 9.64062L4.65365 8.84635L5.09635 7.17969L3.41667 5.91667H1.86719L1.46354 5.09635L2.58333 4.21094L4.25 3.41667L4.0026 2.3099L4.71875 2.15365L5.05729 2.6224L6.30729 2.38802L6.08594 1.42448L5.16146 1.35938C5.27214 1.35124 5.38607 1.33333 5.5 1.33333ZM5.03125 1.35938L4.38021 1.63281L4.06771 1.58073C4.37533 1.46842 4.69434 1.39681 5.03125 1.35938ZM1.35938 5.82552L1.76302 6.29427V7.15365L2.54427 8.01302H3.02604L4.21094 9.47135C2.63867 8.96191 1.49121 7.53776 1.35938 5.82552Z" fill="#723EEB" />
                                         </svg>
                                     </div>
                                     <p>Country</p>
                                 </div>
                                 <p >{data.country}</p>
-                            </div>
+                            </p>
                             {/* 3rd row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
 
@@ -45,9 +46,9 @@ const SendMoneyCompleteTable = () => {
                                     <p>Exchange Rate</p>
                                 </div>
                                 <p >{data.exchangeRate} $</p>
-                            </div>
+                            </p>
                             {/* 4th row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
                                         <svg width="11" height="11" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,9 +58,9 @@ const SendMoneyCompleteTable = () => {
                                     <p>Total Send Money</p>
                                 </div>
                                 <p >{data.totalSendMoney} $</p>
-                            </div>
+                            </p>
                             {/* 5th row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
                                         <svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,9 +70,9 @@ const SendMoneyCompleteTable = () => {
                                     <p>Transaction Id</p>
                                 </div>
                                 <p >{data.transactionid}</p>
-                            </div>
+                            </p>
                             {/* 6th row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full '>
                                         <svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,9 +82,9 @@ const SendMoneyCompleteTable = () => {
                                     <p>Recipient</p>
                                 </div>
                                 <p >{data.recipient}</p>
-                            </div>
+                            </p>
                             {/* 7th row */}
-                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full '>
                                         <svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +94,7 @@ const SendMoneyCompleteTable = () => {
                                     <p>Recipient Bank and Account Number</p>
                                 </div>
                                 <p >{data.bank_And_accountNumber}</p>
-                            </div>
+                            </p>
 
                         </div>
                         <div className='flex flex-row justify-center items-center gap-5'>

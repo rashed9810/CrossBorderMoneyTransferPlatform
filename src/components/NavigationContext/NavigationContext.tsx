@@ -8,10 +8,6 @@ interface NavigationContextType {
     setOpenForgetPassword: (value: boolean) => void;
     message: boolean;
     setMessage: (value: boolean) => void;
-    subWalletData: object;
-    setSubWalletData: (value: boolean) => void;
-    loading: boolean;
-    setLoading: (value: boolean) => void;
 };
 
 interface NavigationContextProviderProps {
@@ -23,10 +19,8 @@ export const NavigationContext = createContext<NavigationContextType | null>(nul
 
 const NavigationContextProvider: React.FC<NavigationContextProviderProps> = ({children}) => {
     const [navOpen, setNavOpen] = useState(true);
-    const [loading, setLoading] = useState(true);
     const [openForgetPassword, setOpenForgetPassword] = useState(false);
     const [message, setMessage] = useState(false);
-    const [subWalletData, setSubWalletData] = useState({});
 
     const toggleNavigation = () =>{
         setNavOpen(!navOpen);
@@ -38,11 +32,7 @@ const NavigationContextProvider: React.FC<NavigationContextProviderProps> = ({ch
         openForgetPassword, 
         setOpenForgetPassword,
         message,
-        setMessage,
-        subWalletData,
-        setSubWalletData,
-        loading,
-        setLoading
+        setMessage
     };
 
     return <NavigationContext.Provider value={info}>

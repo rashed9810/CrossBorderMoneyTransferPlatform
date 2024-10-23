@@ -2,6 +2,7 @@
 import Topbar from '@/components/Topbar';
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 
 import AgentAvater from '../../../../../../public/agent-avater.png';
 
@@ -25,7 +26,7 @@ const page = () => {
                         </div>
                         <div className='flex flex-row items-center gap-3'>
                             <div className='border border-[#723EEB] flex justify-center items-center w-9 h-9 rounded-full '>
-                                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="11" height="11" viewBox="00 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.5 0.682251L5.31771 0.773397L1.15104 2.81767L0.916667 2.93486V3.651H10.0833V2.93486L9.84896 2.81767L5.68229 0.773397L5.5 0.682251ZM5.5 1.61975L7.94792 2.81767H3.05208L5.5 1.61975ZM1.75 4.06767V8.23433H1.33333V9.06767H9.66667V8.23433H9.25V4.06767H8.41667V8.23433H7.58333V4.06767H6.75V8.23433H5.91667V4.06767H5.08333V8.23433H4.25V4.06767H3.41667V8.23433H2.58333V4.06767H1.75ZM0.5 9.48433V10.3177H10.5V9.48433H0.5Z" fill="#723EEB" />
                                 </svg>
                             </div>

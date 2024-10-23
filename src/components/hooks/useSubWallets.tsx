@@ -6,7 +6,7 @@ const useSubWallets = () => {
     const { data: subWallets = [], refetch, isPending} = useQuery({
         queryKey: ['subWallets'],
         queryFn: async () => {
-            const res = await axiosInstance.get('/wallet/sub-wallets');
+            const res = await axiosInstance.get('wallet/sub-wallets');
             return res?.data?.data;
         },
     })

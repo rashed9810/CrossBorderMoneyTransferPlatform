@@ -1,9 +1,10 @@
 "use client";
 import { Minus } from "lucide-react";
-import { signIn } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import React from "react";
 import { usePathname } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const SocialLogin = () => {
   const route = usePathname();
@@ -12,14 +13,14 @@ const SocialLogin = () => {
     <>
       {/* <div className='flex flex-col items-center '> */}
       <div
-        className={`flex justify-between items-center overflow-hidden ${route === `/auth/login` ? "my-4" : "my-4"
+        className={`flex justify-between items-center overflow-hidden ${route === `/auth/login` ? "my-4" : ""
           }`}
       >
         <hr
           className={`w-20 sm:w-32 md:36 lg:w-44 xl:w-52 h-px bg-black border-0`}
         />
-        <span className="mx-2 text-second-1000 w-28 flex text-xs font-medium ml-5">
-          {route === "/auth/login" ? <h3 className="ml-3 md:ml-0">Or Login with</h3> : <h3 className="ml-1 md:ml-0">Or Register with</h3>}
+        <span className="mx-2 text-second-1000 w-24 flex text-xs font-medium ml-5">
+          {route === "/auth/login" ? "Or Login with" : "Or Register with"}
         </span>
         <hr
           className={`w-20 sm:w-32 md:36 lg:w-44 xl:w-52 h-px bg-black border-0`}
@@ -44,7 +45,7 @@ const SocialLogin = () => {
       </button>
       {/* </div> */}
       {route === "/auth/login" ? (
-        <div className="text-center flex justify-center mt-4 items-center gap-1">
+        <div className="text-center  flex justify-center my-4 items-center gap-1">
           <Minus className="" />
           <div className="text-black text-sm flex justify-center items-center">
             Do not have an account?{" "}
@@ -58,7 +59,7 @@ const SocialLogin = () => {
           <Minus className="" />
         </div>
       ) : (
-        <div className="text-center flex justify-center mt-4 items-center gap-1">
+        <div className="text-center flex justify-center mb-4 items-center gap-1">
           <Minus className="" />
           <div className="text-black text-sm flex justify-center items-center">
             Already Have An Account?
