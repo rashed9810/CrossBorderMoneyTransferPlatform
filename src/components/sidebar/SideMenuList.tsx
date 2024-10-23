@@ -12,26 +12,25 @@ interface StateProps {
 const SideMenuList: React.FC<StateProps> = ({ toggleNavigation, isNavOpen }) => {
     const pathName = usePathname();
 
-
     return (
         <>
             <nav>
-                <ul>
+                <ul className='flex flex-col items-center md:block md:items-start sm:items-center'>
                     {/* for responsive*/}
                     {
                         sideMenu.map((item) => (
                             <Link href={`/${item?.link}`}
-                            onClick={toggleNavigation}
+                                onClick={toggleNavigation}
                                 key={item?.id}
-                                className={`flex items-center h-full py-1 px-[3px] my-3 rounded-[10px] mx-1 overflow-x-hidden ${isNavOpen ? ' w-fit md:w-auto' : ''} ${pathName === `/${item.link}` && `${isNavOpen && 'bg-gray-200'}`} cursor-pointer lg:hidden`}
+                                className={`flex items-center h-full py-1 px-[3px] my-3 rounded-[10px] mx-1 overflow-x-hidden ${isNavOpen ? ' w-fit md:w-auto' : ''} ${pathName.includes(item.link) && `${isNavOpen && 'bg-gray-200'}`} cursor-pointer lg:hidden`}
                             >
                                 <div className='flex items-center gap-2 duration-300 hover:scale-y-110 hover:scale-x-105 w-full'>
 
-                                    <div className={`flex justify-center items-center ${pathName === `/${item.link}` ? 'bg-[#723EEB] w-6 h-6 stroke-white rounded-[30%]' : 'w-6 h-6 bg-[#ebe6fa] rounded-[30%]'}`}>
+                                    <div className={`flex justify-center items-center ${pathName.includes(item.link) ? 'bg-[#723EEB] w-6 h-6 stroke-white rounded-[30%]' : 'w-6 h-6 bg-[#ebe6fa] rounded-[30%]'}`}>
                                         {item.icon}
                                     </div>
                                     <div
-                                        className={` text-sm font-semibold capitalize transition-transform transform ${pathName === `/${item.link}` && 'font-bold'} ${isNavOpen ? 'md:block hidden' : 'hidden'}`}
+                                        className={` text-sm font-semibold capitalize transition-transform transform ${pathName.includes(item.link) && 'font-bold'} ${isNavOpen ? 'md:block hidden' : 'hidden'}`}
                                     >
                                         {item?.name}
                                     </div>
@@ -44,15 +43,15 @@ const SideMenuList: React.FC<StateProps> = ({ toggleNavigation, isNavOpen }) => 
                         sideMenu.map((item) => (
                             <Link href={`/${item?.link}`}
                                 key={item?.id}
-                                className={` lg:flex gap-2 items-center h-full py-3 rounded-[10px] duration-300 ${isNavOpen ? ' lg:px-2.5 mx-2' : 'lg:px-2 lg:w-10 mx-auto'} ${pathName === `/${item.link}` && `${isNavOpen ? 'bg-gray-200 xl:w-[93%] ' : 'bg-gray-200'}`} cursor-pointer hidden lg:block text-black`}
+                                className={` lg:flex gap-2 items-center h-full py-3 rounded-[10px] duration-300 ${isNavOpen ? ' lg:px-2.5 mx-2' : 'lg:px-2 lg:w-10 mx-auto'} ${pathName.includes(item.link) && `${isNavOpen ? 'bg-gray-200 xl:w-[93%] ' : 'bg-gray-200'}`} cursor-pointer hidden lg:block text-black`}
                             >
-                                <div className='flex items-center gap-2 duration-300 hover:scale-y-110 hover:scale-x-105 w-full'>
+                                <div className='flex items-center gap-2 duration-200 hover:scale-y-110 hover:scale-x-105 origin-left w-full'>
 
-                                    <div className={`flex justify-center items-center ${pathName === `/${item.link}` ? 'bg-[#723EEB] w-6 h-6 stroke-white rounded-[30%]' : 'w-6 h-6 bg-[#ebe6fa] rounded-[30%]'}`}>
+                                    <div className={`flex justify-center scale-110 items-center ${pathName.includes(item.link) ? 'bg-[#723EEB] w-6 h-6 stroke-white rounded-[30%]' : 'w-6 h-6 bg-[#ebe6fa] rounded-[30%]'}`}>
                                         {item.icon}
                                     </div>
                                     <div
-                                        className={` text-sm capitalize transition-transform transform ${pathName === `/${item.link}` && 'font-semibold'} ${isNavOpen ? 'lg:block hidden' : 'hidden'}`}
+                                        className={` text-sm capitalize transition-transform transform ${pathName.includes(item.link) && 'font-semibold'} ${isNavOpen ? 'lg:block hidden' : 'hidden'}`}
                                     >
                                         {item?.name}
                                     </div>

@@ -1,5 +1,4 @@
 import { sendMoneyPendingTableData } from '@/utils/data/sendMoneyPendingTableData';
-import React from 'react';
 
 const SendMoneyPendingTable = () => {
     return (
@@ -9,7 +8,7 @@ const SendMoneyPendingTable = () => {
                     <div key={data.id} className='bg-gray-100 rounded-2xl p-4 mt-10'>
                         <div className=''>
                             {/* 1st row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center text-xs pb-2 '>
+                            <div className='border-b border-black flex flex-row justify-between items-center text-xs pb-2 '>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600  rounded-full flex justify-center items-center w-5 h-5 '>
                                         <svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,9 +18,9 @@ const SendMoneyPendingTable = () => {
                                     <p>MTCN Number</p>
                                 </div>
                                 <p >{data.mtcnNumber}</p>
-                            </p>
+                            </div>
                             {/* 2nd row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600  rounded-full flex justify-center items-center w-5 h-5 '>
                                         <svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,21 +30,21 @@ const SendMoneyPendingTable = () => {
                                     <p>Transaction Type</p>
                                 </div>
                                 <p >{data.transfer}</p>
-                            </p>
+                            </div>
                             {/* 3rd row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 p-1 rounded-full'>
-                                        <svg width="11" height="11" viewBox="00 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M5.5 0.682251L5.31771 0.773397L1.15104 2.81767L0.916667 2.93486V3.651H10.0833V2.93486L9.84896 2.81767L5.68229 0.773397L5.5 0.682251ZM5.5 1.61975L7.94792 2.81767H3.05208L5.5 1.61975ZM1.75 4.06767V8.23433H1.33333V9.06767H9.66667V8.23433H9.25V4.06767H8.41667V8.23433H7.58333V4.06767H6.75V8.23433H5.91667V4.06767H5.08333V8.23433H4.25V4.06767H3.41667V8.23433H2.58333V4.06767H1.75ZM0.5 9.48433V10.3177H10.5V9.48433H0.5Z" fill="#723EEB" />
                                         </svg>
                                     </div>
                                     <p>Method Name</p>
                                 </div>
                                 <p >{data.method} </p>
-                            </p>
+                            </div>
                             {/* 4th row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 p-1 rounded-full'>
                                         <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,9 +54,9 @@ const SendMoneyPendingTable = () => {
                                     <p>Account Number</p>
                                 </div>
                                 <p >{data.accountNumber}</p>
-                            </p>
+                            </div>
                             {/* 5th row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 p-1 rounded-full'>
 
@@ -69,9 +68,9 @@ const SendMoneyPendingTable = () => {
                                     <p>Sender Amount</p>
                                 </div>
                                 <p >{data.senderAmount} </p>
-                            </p>
+                            </div>
                             {/* 6th row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
 
@@ -83,9 +82,9 @@ const SendMoneyPendingTable = () => {
                                     <p>Exchange Rate</p>
                                 </div>
                                 <p >{data.exchangeRate} $</p>
-                            </p>
+                            </div>
                             {/* 7th row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
 
@@ -97,9 +96,9 @@ const SendMoneyPendingTable = () => {
                                     <p>Fees & Charges</p>
                                 </div>
                                 <p >{data.fees_changes}</p>
-                            </p>
+                            </div>
                             {/* 7th row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
 
@@ -111,9 +110,9 @@ const SendMoneyPendingTable = () => {
                                     <p>Sending Purpose</p>
                                 </div>
                                 <p >{data.sendingPurpose}</p>
-                            </p>
+                            </div>
                             {/* 7th row */}
-                            <p className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
+                            <div className='border-b border-black flex flex-row justify-between items-center py-3 text-xs'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='border border-indigo-600 flex justify-center items-center w-5 h-5 rounded-full'>
 
@@ -125,7 +124,7 @@ const SendMoneyPendingTable = () => {
                                     <p>Source of Fund</p>
                                 </div>
                                 <p >{data.sourceOfFund}</p>
-                            </p>
+                            </div>
                         </div>
                         <div className='flex flex-row justify-center items-center gap-5'>
                             <div className="text-[10px] bg-[#723EEB] text-center text-white px-3 py-1 rounded-full mt-5 hover:shadow-lg shadow-black">

@@ -1,9 +1,91 @@
 'use client'
+import LoadingSpin from '@/components/2fa-security/LoadingSpin';
 import Topbar from '@/components/Topbar';
-import Link from 'next/link';
-import React from 'react';
+import useAxiosSecure from '@/components/hooks/useAxiosSecure';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-const page = () => {
+import hiddenEye from '../../../../../../public/svg/hiddenEye.svg';
+import openEye from '../../../../../../public/svg/openEye.svg';
+
+
+const PaymentConfirmationPage = () => {
+    const id = useSearchParams().get('id');
+    const axiosInstance = useAxiosSecure();
+    const queryClient = useQueryClient();
+    const [pin, setPin] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const router = useRouter();
+
+    const { data, isError, isLoading, error } = useQuery({
+        queryKey: ['preparedTransaction'],
+        queryFn: async () => {
+            const res = await axiosInstance.get(`/transaction/wallet-to-bank/prepared/${id}`);
+            return res?.data?.data;
+        },
+    });
+
+    //Add confirm transaction
+    const { data: pendingTransactionData, isSuccess, isPending: isPendingTransaction, isError: isPendingTransactionError, mutate, error: pendingTransactionError } = useMutation({
+        mutationFn: async () => {
+            const response = await axiosInstance.post(`/transaction/wallet-to-bank/pending/${id}`, {
+                "pinNumber": parseInt(pin)
+            });
+            return response.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['pending-transaction'] })
+        },
+    });
+
+
+
+    // handle confirm payment
+
+    const handleConfirmPayment = () => {
+        const pinRegex = /^[0-9]{4}$/;
+        if (!pin || pin === '') {
+            toast.error('Please enter your PIN');
+            return;
+        }
+
+        if (!pinRegex.test(pin)) {
+            toast.error('Please enter a valid pin');
+            return;
+        }
+
+        mutate();
+    }
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(error?.message);
+        }
+        if (isPendingTransactionError) {
+            toast.error(pendingTransactionError?.message);
+        }
+        if (isSuccess) {
+            toast.success(pendingTransactionData?.message);
+            redirect(`/user/send-money/payment-confirmation?transactionID=${pendingTransactionData?.data?.transactionId}`);
+        }
+    }, [isError, isSuccess, isPendingTransactionError, pendingTransactionData, error, pendingTransactionError]);
+
+    useEffect(() => {
+        const handleBackButton = (e: PopStateEvent) => {
+            // You can customize the behavior here, e.g. force back to a specific page
+            e.preventDefault();
+            router.back(); // or router.push('/some-page');
+        };
+
+        window.addEventListener('popstate', handleBackButton);
+
+        return () => {
+            window.removeEventListener('popstate', handleBackButton);
+        };
+    }, [router]);
     return (
         <>
             <Topbar>Payment Confirmation</Topbar>
@@ -13,39 +95,47 @@ const page = () => {
                         <h2 className="text-xl font-semibold">Payment Confirmation</h2>
                     </div>
                     <div>
-                        <div className='my-8 space-y-1'>
-                            <h5 className="text-xs">Transfering Wallet: Main Wallet</h5>
-                            <h5 className="text-xs">Transfering Amount: 00.0$</h5>
+                        <div className='my-8 space-y-1 text-xs lg:text-sm'>
+                            <h5 className="">Transfering Wallet: {data?.walletType}</h5>
+                            <h5 className="">Transfering Amount: {data?.amount}</h5>
                         </div>
                         <div className='flex flex-row w-full h-28 my-3'>
                             <div className='border p-2 w-1/2 h-full'>
-                                <h5 className="text-[10px]">Your Current Wallet Balance: </h5>
-                                <h4 className="text-xl h-full flex flex-row justify-end items-end pb-8">00.0$</h4>
+                                <h5 className="text-xs lg:text-sm">Your Current Wallet Balance: </h5>
+                                <h4 className="text-2xl h-full flex flex-row justify-end items-end pb-8">{
+                                    isLoading ? <LoadingSpin height='2rem' width='2rem' borderWidth='0.425rem' color='#723EEB' /> :
+                                        data?.senderCurrentBalance
+                                }</h4>
                             </div>
                             <div className='border p-2 w-1/2 h-full'>
-                                <h5 className="text-[10px]">Balance after Transaction: </h5>
-                                <h4 className="text-xl h-full flex flex-row justify-end items-end pb-4">00.0$</h4>
+                                <h5 className="text-xs lg:text-sm">Balance after Transaction: </h5>
+                                <h4 className="text-2xl h-full flex flex-row justify-end items-end pb-4">{
+                                    isLoading ? <LoadingSpin height='2rem' width='2rem' borderWidth='0.425rem' color='#723EEB' /> :
+                                        data?.transactionAfterBalance
+                                }</h4>
                             </div>
                         </div>
                         <div className="w-full my-5 relative ">
-                            <label className="block mb-1 text-gray-600 font-bold text-[10px]">Enter PIN*</label>
+                            <label className="block mb-1 text-gray-600 font-bold text-xs lg:text-sm">Enter PIN*</label>
                             <input
-                                type="password"
+                                type={isPasswordVisible ? 'text' : 'password'}
                                 name="endterPIN"
-                                className="w-full px-3 py-2 text-[10px] border border-gray-300 rounded-full focus:outline-none"
+                                className="w-full px-3 py-2 text-xs border border-gray-300 rounded-full focus:outline-none"
                                 placeholder="Enter PIN....."
+                                value={pin}
+                                onChange={(e) => setPin(e.target.value)}
                             />
-                            <span className='absolute right-5 mt-2'>
-
-                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.59674 0L0.847251 0.785877L4.08961 4.16856L9.87373 10.2335L10.8676 11.2927L14.4033 15L15.1528 14.2141L11.9104 10.8144C14.1181 9.66757 15.5988 7.96555 15.6904 7.85877L16 7.5L15.6904 7.14123C15.5499 6.97679 12.2159 3.12642 8 3.12642C6.97963 3.12642 6.01629 3.36133 5.13238 3.70729L1.59674 0ZM8 4.21982C9.1222 4.21982 10.1833 4.55083 11.1283 5.00569C11.4644 5.5951 11.6497 6.26139 11.6497 6.9533C11.6497 7.94633 11.2831 8.85393 10.6884 9.53303L9.2057 7.97836C9.42363 7.6986 9.56416 7.34411 9.56416 6.9533C9.56416 6.04784 8.86354 5.31321 8 5.31321C7.62729 5.31321 7.28921 5.46056 7.0224 5.68907L5.96334 4.57859C6.611 4.36931 7.28921 4.21982 8 4.21982ZM3.1446 4.71526C1.47251 5.79371 0.386966 7.0494 0.309572 7.14123L0 7.5L0.309572 7.85877C0.443992 8.0168 3.53157 11.5597 7.5112 11.8394C7.6721 11.8565 7.83503 11.8736 8 11.8736C8.16497 11.8736 8.3279 11.8565 8.4888 11.8394C8.91853 11.8095 9.33809 11.7497 9.74338 11.6515L8.81466 10.6777C8.5499 10.7417 8.28106 10.7802 8 10.7802C5.98778 10.7802 4.35031 9.06321 4.35031 6.9533C4.35031 6.66287 4.38697 6.37884 4.44807 6.09909L3.1446 4.71526ZM3.43788 5.82574C3.35438 6.19519 3.30754 6.57104 3.30754 6.9533C3.30754 7.90362 3.56212 8.77919 4.00815 9.53303C2.81466 8.81549 1.90224 7.97409 1.43381 7.5C1.82281 7.10493 2.52342 6.44932 3.43788 5.82574ZM12.5621 5.82574C13.4766 6.44932 14.1752 7.10493 14.5662 7.5C14.0978 7.97409 13.1711 8.83257 11.9756 9.55011C12.4236 8.79627 12.6925 7.90362 12.6925 6.9533C12.6925 6.57104 12.6456 6.19305 12.5621 5.82574Z" fill="#4B4B4B" />
-                                </svg>
-
+                            <span onClick={() => setIsPasswordVisible(!isPasswordVisible)} className='absolute right-5 mt-2 cursor-pointer'>
+                                {
+                                    isPasswordVisible ? <Image src={openEye} alt="hiddenEyeIcon" className='w-4 h-4' /> :
+                                        <Image src={hiddenEye} alt="hiddenEyeIcon" className='w-4 h-4' />
+                                }
                             </span>
+
                         </div>
-                        <Link href={'/user/send-money/payment-confirmation'} className="w-full ">
-                            <button className="bg-[#723EEB] hover:bg-indigo-600 text-white w-full text-max px-4 py-2 text-xs rounded-full">Confirm Payment</button>
-                        </Link>
+                        <div className="w-full ">
+                            <button onClick={() => handleConfirmPayment()} className="bg-[#723EEB] hover:bg-indigo-600 text-white w-full text-max px-4 py-2 text-xs rounded-full flex justify-center items-center">{isPendingTransaction ? <LoadingSpin height='1rem' width='1rem' borderWidth='0.225rem' color='#FFF' /> : "Confirm Payment"}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,4 +143,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default PaymentConfirmationPage;
