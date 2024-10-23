@@ -3,17 +3,16 @@ import CardSubTitle from '@/components/common/cardSubTitle/CardSubTitle';
 import SelectSendMoneyCard from '@/components/common/selectSendMoneyCard/SelectSendMoneyCard';
 import Topbar from '@/components/Topbar';
 import Link from 'next/link';
-import React from 'react';
 
-const page = () => { 
+const page = () => {
     return (
-        <div className='min-h-screen max-h-auto'>
+        <div className='min-h-[calc(100vh-100px)]'>
             <Topbar>Send Money</Topbar>
-            <CardSubTitle title='Select Send Money Option' />
-            <div className='bg-white rounded-xl lg:h-[340px] mt-5 py-2 lg:py-0'>
+            <CardSubTitle fontSize='1rem' title='Select Send Money Option' />
+            <div className='bg-white rounded-xl lg:min-h-[20rem] lg:pb-5 xl:pb-0 mt-5 py-2 lg:py-0'>
                 <h2 className="text-xl font-semibold text-center py-4">Select An Option</h2>
 
-                <div className='flex flex-col lg:flex-row justify-center items-center gap-8 mt-5'>
+                <div className='flex flex-col lg:flex-row flex-wrap justify-center items-center gap-8 mt-5'>
                     <Link href={'/user/send-money/wallet-to-wallet'}>
                         <SelectSendMoneyCard
                             title='Wallet to Wallet Transfer'

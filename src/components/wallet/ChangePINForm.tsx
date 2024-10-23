@@ -1,16 +1,16 @@
 'use client'
 import React, { useState } from 'react';
-import ForgetPINModal from '../common/ForgetPINModal/ForgetPINModal';
-import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
+import useNavigationContext from '../NavigationContext/useNavigationContext';
+import LoadingSpinner from '../common/Loading/LoadingSpinner';
 import useAxiosSecure from '../hooks/useAxiosSecure';
-import { toast, ToastContainer } from 'react-toastify';
-import Swal from 'sweetalert2';
 
 interface ModalProps {
     handleForgetPIN: () => void;
     mainWallet?: any;
-    subWalletData?: any;
+    // subWalletData?: any;
     setChangePINModalOpen: (value: boolean) => void;
 };
 
@@ -20,11 +20,15 @@ interface FormData {
     confirmNewPin: number;
 };
 
-const ChangePINForm: React.FC<ModalProps> = ({ handleForgetPIN, mainWallet, subWalletData, setChangePINModalOpen }) => {
-
-    const [pin, setPin] = useState(false);
+const ChangePINForm: React.FC<ModalProps> = ({ handleForgetPIN, mainWallet, setChangePINModalOpen }) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [showCurrentPin, setShowCurrentPin] = useState(false);
+    const [showNewPin, setShowNewPin] = useState(false);
+    const [showConfirmNewPin, setShowConfirmNewPin] = useState(false);
     const axiosInstance = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+    const { subWalletData }: any = useNavigationContext();
 
     const onSubmit = async (data: any) => {
         const oldPin = parseInt(data?.currentPin);
@@ -36,81 +40,27 @@ const ChangePINForm: React.FC<ModalProps> = ({ handleForgetPIN, mainWallet, subW
             oldPin,
             newPin,
         };
-
+        setLoading(true);
         try {
             if (newPin !== confirmNewPin) {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "New Pin doesn't match",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                toast.error("New Pin doesn't match");
             } else {
                 const res = await axiosInstance.put('/wallet/change-pin', changedPinInfo)
 
                 if (res?.status === 200) {
                     reset();
                     setChangePINModalOpen(false);
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Pin has been changed",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    setLoading(false);
+                    toast.success("Pin successfully changed");
                 }
             }
         } catch (error: any) {
-            if (error.response && error.response.status === 403) {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Current Pin is wrong",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-            else {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Current Pin is wrong",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+            if (error) {
+                setError("Your pin is wrong");
+                reset();
             }
         }
-
-        // if (newPin !== confirmNewPin) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "New Pin doesn't match",
-        //         showConfirmButton: false,
-        //         timer: 1500
-        //     });
-        // } else {
-        //     const res = await axiosInstance.put('/wallet/change-pin', changedPinInfo)
-        //     if (res?.status === 200) {
-        //         Swal.fire({
-        //             position: "center",
-        //             icon: "success",
-        //             title: "Pin has been changed",
-        //             showConfirmButton: false,
-        //             timer: 1500
-        //         });
-        //     }
-        //     //  else {
-        //     //     Swal.fire({
-        //     //         position: "center",
-        //     //         icon: "error",
-        //     //         title: "Current Pin is wrong",
-        //     //         showConfirmButton: false,
-        //     //         timer: 1500
-        //     //     });
-        //     // }
-        // }
+        setLoading(false);
     }
 
     return (
@@ -126,32 +76,41 @@ const ChangePINForm: React.FC<ModalProps> = ({ handleForgetPIN, mainWallet, subW
             <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Current Pin Field */}
                 <div className="mb-3">
-                    <label className="">Enter Current PIN</label>
+                    <label className="text-gray-600 font-semibold">Enter Current PIN</label>
                     <div className="relative">
                         <input
-                            type={'number'}
+                            type={showCurrentPin ? 'text' : 'password'}
                             {...register("currentPin", {
                                 required: "Pin is required",
                                 minLength: 4,
+                                pattern: /^[0-9]*$/
                             })}
-                            className={`w-full mt-1 px-3 py-1 border border-gray-400 rounded-full focus:outline-none placeholder:text-black`}
-                            placeholder="PIN Here...."
+                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-[10px] focus:outline-none placeholder:text-xs`}
+                            placeholder="Enter PIN...."
                         />
                         <button
                             type="button"
-                            onClick={() => setPin(!pin)}
-                            className="absolute top-4 right-4 text-[11px]"
+                            onClick={() => setShowCurrentPin(!showCurrentPin)}
+                            className="absolute top-3 right-4 text-[14px]"
                         >
-                            {pin ? <FaEye /> : <FaEyeSlash />}
+                            {showCurrentPin ? <FaEye /> : <FaEyeSlash />}
                         </button>
                     </div>
 
                     {errors.currentPin?.type === 'required' && (
                         <p className="text-red-500 text-xs">Pin is required</p>
                     )}
+
+                    {errors.currentPin?.type === 'pattern' && (
+                        <p className="text-red-500 text-xs">Pin must be a number</p>
+                    )}
                     {errors.currentPin?.type === 'minLength' && (
                         <p className="text-red-500 text-xs">Pin must be at least 4 numbers</p>
                     )}
+                    {error && (
+                        <p className="text-red-500 text-xs">Your pin is wrong</p>
+                    )}
+
                 </div>
                 {/* forget pin */}
                 <div className='flex flex-row justify-end'>
@@ -163,28 +122,33 @@ const ChangePINForm: React.FC<ModalProps> = ({ handleForgetPIN, mainWallet, subW
                 </div>
                 {/* New Pin Field */}
                 <div className="mb-3">
-                    <label className="">Enter New PIN</label>
+                    <label className="text-gray-600 font-semibold">Enter New PIN</label>
                     <div className="relative">
                         <input
-                            type={'number'}
+                            type={showNewPin ? 'text' : 'password'}
                             {...register("newPin", {
                                 required: "Pin is required",
                                 minLength: 4,
+                                pattern: /^[0-9]*$/
                             })}
-                            className={`w-full mt-1 px-3 py-1 border border-gray-400 rounded-full focus:outline-none placeholder:text-black`}
-                            placeholder="PIN Here...."
+                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-[10px] focus:outline-none placeholder:text-xs`}
+                            placeholder="Enter PIN...."
                         />
                         <button
                             type="button"
-                            onClick={() => setPin(!pin)}
-                            className="absolute top-4 right-4 text-[11px]"
+                            onClick={() => setShowNewPin(!showNewPin)}
+                            className="absolute top-3 right-4 text-[14px]"
                         >
-                            {pin ? <FaEye /> : <FaEyeSlash />}
+                            {showNewPin ? <FaEye /> : <FaEyeSlash />}
                         </button>
                     </div>
 
                     {errors.newPin?.type === 'required' && (
                         <p className="text-red-500 text-xs">Pin is required</p>
+                    )}
+
+                    {errors.newPin?.type === 'pattern' && (
+                        <p className="text-red-500 text-xs">Pin must be a number</p>
                     )}
                     {errors.newPin?.type === 'minLength' && (
                         <p className="text-red-500 text-xs">Pin must be at least 4 numbers</p>
@@ -192,40 +156,47 @@ const ChangePINForm: React.FC<ModalProps> = ({ handleForgetPIN, mainWallet, subW
                 </div>
                 {/* Confirm New Pin Field */}
                 <div className="mb-3">
-                    <label className="">Confirm New PIN</label>
+                    <label className="text-gray-600 font-semibold">Confirm New PIN</label>
                     <div className="relative">
                         <input
-                            type={'number'}
+                            type={showConfirmNewPin ? 'text' : 'password'}
                             {...register("confirmNewPin", {
                                 required: "Pin is required",
                                 minLength: 4,
+                                pattern: /^[0-9]*$/
                             })}
-                            className={`w-full mt-1 px-3 py-1 border border-gray-400 rounded-full focus:outline-none placeholder:text-black`}
-                            placeholder="PIN Here...."
+                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-[10px] focus:outline-none placeholder:text-xs`}
+                            placeholder="Enter PIN...."
                         />
                         <button
                             type="button"
-                            onClick={() => setPin(!pin)}
-                            className="absolute top-4 right-4 text-[11px]"
+                            onClick={() => setShowConfirmNewPin(!showConfirmNewPin)}
+                            className="absolute top-3 right-4 text-[14px]"
                         >
-                            {pin ? <FaEye /> : <FaEyeSlash />}
+                            {showConfirmNewPin ? <FaEye /> : <FaEyeSlash />}
                         </button>
                     </div>
 
                     {errors.confirmNewPin?.type === 'required' && (
                         <p className="text-red-500 text-xs">Pin is required</p>
                     )}
+
+                    {errors.confirmNewPin?.type === 'pattern' && (
+                        <p className="text-red-500 text-xs">Pin must be a number</p>
+                    )}
                     {errors.confirmNewPin?.type === 'minLength' && (
                         <p className="text-red-500 text-xs">Pin must be at least 4 numbers</p>
                     )}
                 </div>
-                {/* create now Button */}
+                {/* confirm Button */}
                 <div className="w-full mx-auto py-5 ">
                     <button
                         type="submit"
-                        className="w-full bg-[#ea5455] text-white p-2 rounded text-[10px]"
+                        className="w-full bg-[#ea5455] text-white p-2 rounded text-xs"
                     >
-                        Confirm
+
+                        {loading ? <LoadingSpinner className='h-4 w-4' /> : 'Confirm'}
+                        {/* Confirm */}
                     </button>
                 </div>
             </form>
