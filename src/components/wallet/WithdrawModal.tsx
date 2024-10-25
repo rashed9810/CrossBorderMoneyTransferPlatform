@@ -6,15 +6,13 @@ import ForgetPINModal from '../common/ForgetPINModal/ForgetPINModal';
 const WithdrawModal = () => {
     const [isWithdrawModalOpen, setWithdrawModalOpen] = useState(false);
     const [isForgetPINModalOpen, setForgetPINModalOpen] = useState(false);
-    const [walletInfo, setWalletInfo] = useState({});
 
     const handleWithdraw = () => {
         setWithdrawModalOpen(true);
         // setForgetPINModalOpen(false);
     };
 
-    const handleForgetPIN = (walletInfo : any) => {
-        setWalletInfo(walletInfo);
+    const handleForgetPIN = () => {
         setForgetPINModalOpen(true);
         setWithdrawModalOpen(false);
     };
@@ -36,7 +34,6 @@ const WithdrawModal = () => {
                 >
                     <WithdrawForm
                         handleForgetPIN={handleForgetPIN}
-                        setWithdrawModalOpen={setWithdrawModalOpen}
                     />
 
                 </Modal>
@@ -50,7 +47,6 @@ const WithdrawModal = () => {
             <ForgetPINModal
                 setForgetPINModalOpen={setForgetPINModalOpen}
                 isForgetPINModalOpen={isForgetPINModalOpen}
-                mainWallet={walletInfo}
             />
 
         </div>

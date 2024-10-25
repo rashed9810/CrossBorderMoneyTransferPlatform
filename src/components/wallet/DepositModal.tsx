@@ -6,14 +6,12 @@ import ForgetPINModal from '../common/ForgetPINModal/ForgetPINModal';
 const DepositModal = () => {
     const [isDepositModalOpen, setDepositModalOpen] = useState(false);
     const [isForgetPINModalOpen, setForgetPINModalOpen] = useState(false);
-    const [walletInfo, setWalletInfo] = useState({});
 
     const handleDeposit = () => {
         setDepositModalOpen(true);
     };
 
-    const handleForgetPIN = (walletInfo : any) => {
-        setWalletInfo(walletInfo);
+    const handleForgetPIN = () => {
         setForgetPINModalOpen(true);
         setDepositModalOpen(false);
     };
@@ -32,7 +30,6 @@ const DepositModal = () => {
             >
                 <DepositForm
                     handleForgetPIN={handleForgetPIN}
-                    setDepositModalOpen={setDepositModalOpen}
                 />
             </Modal>
             <button
@@ -45,7 +42,6 @@ const DepositModal = () => {
             <ForgetPINModal
                 setForgetPINModalOpen={setForgetPINModalOpen}
                 isForgetPINModalOpen={isForgetPINModalOpen}
-                mainWallet={walletInfo}
             />
         </div>
     );

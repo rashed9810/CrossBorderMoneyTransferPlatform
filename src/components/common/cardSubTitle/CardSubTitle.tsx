@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 
 
 interface CardSubTitleProps {
@@ -11,7 +12,7 @@ const CardSubTitle = (props: CardSubTitleProps) => {
         <>
             <p
                 style={{ fontSize: props?.fontSize ? props?.fontSize : '14px' }}
-                className="font-bold text-sm lg:text-base text-text-400 dark:text-max"
+                className="font-bold text-sm text-text-400 dark:text-max"
             >
                 {(props?.title)}
             </p>

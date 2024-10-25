@@ -5,14 +5,14 @@ import Topbar from '@/components/Topbar';
 import React, { useState } from 'react';
 
 const KYCPage = () => {
-    const [kycForm, setKycForm] = useState<string>('primary');
+    const [id, setId] = useState(1);
 
-    const handleKYC = (props: 'primary' | 'secondary') => {
-        if (props === 'primary') {
-            setKycForm('primary')
+    const handleKYC = (index: number) => {
+        if (index === 1) {
+            setId(1)
         }
-        if (props === 'secondary') {
-            setKycForm('secondary')
+        else if (index === 2) {
+            setId(2)
         }
     }
     return (
@@ -20,18 +20,18 @@ const KYCPage = () => {
             <Topbar>KYC</Topbar>
             <div className='pt-10 bg-white rounded-[10px] my-5'>
                 <div className='flex flex-row justify-center items-center gap-2 border-b border-black text-sm font-bold'>
-                    <button className={`${kycForm === 'primary' ? 'border-x border-t border-black p-1' : ''}`}
-                        onClick={() => handleKYC('primary')}>Primary KYC</button>
 
-                    <button className={`${kycForm === 'secondary' ? 'border-x border-t border-black p-1' : ''}`}
-                        onClick={() => handleKYC('secondary')}>Secondary KYC</button>
+                    <button className={`${id === 1 ? 'border-x border-t border-black p-1' : ''}`}
+                        onClick={() => handleKYC(1)}>Primary KYC</button>
+
+                    <button className={`${id === 2 ? 'border-x border-t border-black p-1' : ''}`}
+                        onClick={() => handleKYC(2)}>Secondary KYC</button>
+
                 </div>
                 <div>
                     {
-                        kycForm === 'primary' && <PrimaryKycForm />
-                    }
-                    {
-                        kycForm === 'secondary' && <SecondaryKycForm />
+                        id === 1 ? <PrimaryKycForm /> :
+                            <SecondaryKycForm />
                     }
                 </div>
             </div>

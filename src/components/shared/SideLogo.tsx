@@ -1,14 +1,12 @@
 import Image from 'next/image';
+import React from 'react';
 import logo from '../../../public/SidebarLogo.png';
-import useNavigationContext from '../NavigationContext/useNavigationContext';
 
 
 const SideLogo = () => {
-    const { isNavOpen, toggleNavigation }: any = useNavigationContext();
-
     return (
-        <div className={`px-5 py-3 lg:w-[90%] w-[100%] ${isNavOpen ? 'hidden md:block' : ''}`}>
-            <Image src={logo} className='w-[100%]' alt='notfound' priority />
+        <div className='px-5 py-3'>
+            <Image src={logo} width={110} height={100} alt='notfound' />
         </div>
     );
 };
