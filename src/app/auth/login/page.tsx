@@ -5,9 +5,15 @@ import LoginForm from './components/LoginForm';
 import useNavigationContext from '@/components/NavigationContext/useNavigationContext';
 import ForgetPassword from '@/components/forgetPassword/ForgetPassword';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
-  const { openForgetPassword, message, setMessage }: any = useNavigationContext();
+  const { message, setMessage }: any = useNavigationContext();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  
 
   return (
     <div className='bg-gradient-to-r from-pink-200 to-blue-200 min-h-screen w-full flex items-center justify-center'>
@@ -26,21 +32,19 @@ const LoginPage = () => {
             </div>
           </div>
         ) : (
-          <div className='lg:flex items-center justify-center gap-5'>
-            <div className='relative lg:block'>
+          <div className='sm:flex items-center justify-center gap-5 '>
+            <div className='relative lg:block '>
               <div className='hidden lg:block h-full mt-3'>
                 <Image
                   src="/auth/login_bg.png"
-                  width={530}
+                  width={500}
                   height={460}
                   alt="Picture of the author"
                 />
               </div>
             </div>
-            <div className='grid justify-items-center '>
-              {openForgetPassword ? <ForgetPassword /> : (
-                <LoginForm />
-              )}
+            <div className='w-full sm:w-[70%] lg:w-[40%]'>
+              <LoginForm />
             </div>
           </div>
         )}

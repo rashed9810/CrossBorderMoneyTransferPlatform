@@ -1,9 +1,11 @@
-'use client'
+"use client"
 import { GoDotFill } from "react-icons/go";
-import { recipientsData } from "../../utils/data/recipientsData";
+// import { recipientsData } from "../../utils/data/recipientsData";
 import RecipientsTable from "./RecipientsTable";
 import { useState } from "react";
 import SelectAgentModal from "../send-money/SelectAgentModal";
+import useRecipients from "../hooks/useRecipients";
+import React from "react";
 
 
 type OpenStateType = {
@@ -15,6 +17,8 @@ const SelectRecipientsForBank = () => {
     const [agentModalOpen, setAgentModalOpen] = useState(false);
     const [open, setOpen] = useState<OpenStateType>({});
     const [select, setSelect] = useState<OpenStateType>({});
+    const [recipients, isPending] = useRecipients();
+
 
     const toggleCard = (id: number) => {
         setOpen(prevState => ({
@@ -41,21 +45,21 @@ const SelectRecipientsForBank = () => {
     return (
         <>
             {
-                recipientsData.map((data) => (
-                    <div key={data.id} className={`${select[data.id] ? 'bg-[#abd2e9]' : 'bg-white'} px-2 py-2 lg:px-6 lg:py-4 mb-5 rounded-2xl cursor-pointer ${open[data.id] ? ' shadow-md shadow-neutral-400' : ''}`}>
+                recipients.map((data:any) => (
+                    <div key={data.id} className={`${select[data.recipientsId] ? 'bg-[#abd2e9]' : 'bg-white'} px-2 py-2 lg:px-6 lg:py-4 mb-5 rounded-2xl cursor-pointer ${open[data.id] ? ' shadow-md shadow-neutral-400' : ''}`}>
                         <div className="flex flex-row justify-between items-center w-full">
                             <div onClick={() => toggleCard(data.id)} className="flex flex-row gap-3 lg:gap-4 items-start w-[85%]">
                                 <div className="bg-gray-200 rounded-[50%] w-6 lg:w-9 h-6 lg:h-9 flex justify-center items-center hover:bg-[#723EEB] hover:stroke-white">
-                                    {data.icon}
+                                    {/* {data.icon} */}
                                 </div>
                                 <div className="lg:w-36 w-24">
-                                    <h3 className="text-[10px] lg:text-base font-bold">{data.name}</h3>
+                                    <h3 className="text-[10px] lg:text-base font-bold">{data.fullName}</h3>
                                     <div>
                                         <p className="text-[10px] -ml-[2px]"> <GoDotFill className="text-[#FF9F43] inline-block items-center -mr-1" /> Bank transfer</p>
                                     </div>
                                 </div>
                                 <div className="">
-                                    <h3 className="text-[10px] lg:text-base font-semibold text-[#723EEB]">ID: {data.recipientsId}</h3>
+                                    <h3 className="text-[10px] lg:text-base font-semibold text-[#723EEB]">ID: {data.recipientId}</h3>
                                 </div>
                             </div>
                             <div onClick={() => handleSelect(data.id)} className="flex flex-row justify-end gap-2 w-[15%]">

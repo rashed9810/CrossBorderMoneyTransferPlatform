@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
-import Modal from '../common/Modal/Modal';
-import ChangePINForm from './ChangePINForm';
-import WithdrawIntoWalletModal from './WithdrawIntoWalletModal';
-import EditWalletModal from './EditWalletModal';
-import ForgetPINModal from '../common/ForgetPINModal/ForgetPINModal';
 import Link from 'next/link';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import LoadingSpinner from '../common/Loading/LoadingSpinner';
 import useCurrency from '../hooks/useCurrency';
 
 interface ModalProps {
     handleWithdrawIntoWallet: () => void;
     handleChangePIN: (value: any) => void;
     handleForgetPIN: () => void;
-    handleEditWallet: () => void;
+    handleEditSubWallet: (value: any) => void;
+    handleDeleteSubWallet: (value: any) => void;
     subWalletData: any;
 }
 
-const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, handleChangePIN, handleForgetPIN, handleEditWallet, subWalletData }) => {
+const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, handleChangePIN, handleForgetPIN, handleEditSubWallet, handleDeleteSubWallet, subWalletData }) => {
+    const [loading, setLoading] = useState(false);
+    const [copyId, setCopyId] = useState(false)
     const [currency] = useCurrency();
+
+    const handleCopy = (e: any) => {
+        e.preventDefault()
+        navigator.clipboard.writeText(subWalletData?.walletId as string)
+        toast.success("Copied ID!")
+        setCopyId(true)
+        setTimeout(() => {
+            setCopyId(false)
+        }, 2000)
+    }
 
     return (
         <div className='relative'>
@@ -24,10 +34,12 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
             <div className='-mt-1 mb-2'>
                 <div className=" text-xs flex flex-row items-center">Wallet ID :
                     <span className='border border-gray-400 px-[3px]'>{subWalletData?.walletId}</span>
-                    <div className='border border-gray-300 p-[3px]'>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 0V8.33333H2.91667V7.5H0.833333V0.833333H5.83333V1.25H6.66667V0H0ZM3.33333 1.66667V10H10V1.66667H3.33333ZM4.16667 2.5H9.16667V9.16667H4.16667V2.5Z" fill="#723EEB" />
-                        </svg>
+                    <div onClick={handleCopy} className='border cursor-pointer border-gray-300 p-[3px]'>
+                        {
+                            !copyId ? <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0V8.33333H2.91667V7.5H0.833333V0.833333H5.83333V1.25H6.66667V0H0ZM3.33333 1.66667V10H10V1.66667H3.33333ZM4.16667 2.5H9.16667V9.16667H4.16667V2.5Z" fill="#723EEB" />
+                            </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        }
                     </div>
                     <div className='border border-gray-300 p-[3px]'>
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +58,7 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
                 <p className="text-xs text-gray-500">Today, {new Date().toISOString().slice(0, 10)}</p>
             </div>
             <div className='mt-5 mb-3'>
-                <h2 className="font-semibold">$ <span className='text-5xl'>{subWalletData?.balance}.0</span>{subWalletData?.currency?.code}</h2>
+                <h2 className="font-semibold">{subWalletData?.currency?.symbol} <span className='text-5xl'>{subWalletData?.balance > 0 ? subWalletData?.balance : '0.0'}</span>{subWalletData?.currency?.code}</h2>
             </div>
             <div className='w-full flex flex-row justify-between items-center gap-10 my-5'>
                 <div className='w-5/6 flex flex-row gap-2 text-xs'>
@@ -66,7 +78,7 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
                 <div className='w-1/6 flex flex-row justify-end gap-1 '>
 
                     <button
-                        onClick={handleEditWallet}
+                        onClick={() => handleEditSubWallet(subWalletData)}
                         className="text-xs bg-[#723EEB] text-white w-6 h-6 flex justify-center items-center rounded">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M13.648 0.49707C13.1687 0.49707 12.6991 0.682942 12.3371 1.0449L6.13486 7.2276L5.9979 7.36455L5.95877 7.56021L5.52833 9.75154L5.33267 10.6711L6.25225 10.4755L8.44359 10.045L8.63924 10.0059L8.7762 9.86894L14.9589 3.66668C15.6804 2.9452 15.6804 1.76638 14.9589 1.0449C14.5969 0.682942 14.1274 0.49707 13.648 0.49707ZM13.648 1.71013C13.7947 1.71013 13.939 1.78595 14.0784 1.92535C14.3573 2.20416 14.3573 2.50742 14.0784 2.78623L8.01315 8.85153L6.93704 9.06675L7.15226 7.99065L13.2176 1.92535C13.357 1.78595 13.5013 1.71013 13.648 1.71013ZM0.5 2.98189V15.5038H13.0219V7.24716L11.7697 8.49935V14.2516H1.75219V4.23408H7.50444L8.75663 2.98189H0.5Z" fill="white" />
@@ -74,6 +86,7 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
                     </button>
 
                     <button
+                        onClick={() => handleDeleteSubWallet(subWalletData)}
                         className="text-xs bg-[#ea5455] text-white w-7 flex justify-center items-center rounded">
                         <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6.5 0C6.10742 0 5.70605 0.137695 5.42188 0.421875C5.1377 0.706055 5 1.10742 5 1.5V2.25H0.5V3.75H1.25V15.75C1.25 16.9834 2.2666 18 3.5 18H12.5C13.7334 18 14.75 16.9834 14.75 15.75V3.75H15.5V2.25H11V1.5C11 1.10742 10.8623 0.706055 10.5781 0.421875C10.2939 0.137695 9.89258 0 9.5 0H6.5ZM6.5 1.5H9.5V2.25H6.5V1.5ZM2.75 3.75H13.25V15.75C13.25 16.166 12.916 16.5 12.5 16.5H3.5C3.08398 16.5 2.75 16.166 2.75 15.75V3.75ZM4.25 6V14.25H5.75V6H4.25ZM7.25 6V14.25H8.75V6H7.25ZM10.25 6V14.25H11.75V6H10.25Z" fill="white" />
@@ -92,8 +105,8 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
                             placeholder="Enter Amount"
                         />
                         <select className="flex-1 px-2 border border-gray-400 rounded-r-full bg-[#723EEB] text-white focus:outline-none select select-sm">
-                            {currency?.map((data: any) => (
-                                <option value={data?.name} key={data._id}>
+                            {currency?.map((data: any, index: number) => (
+                                <option value={data?.name} key={index}>
                                     {data?.name}
                                 </option>
                             ))}
@@ -110,8 +123,8 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
                             placeholder="Enter Amount"
                         />
                         <select className="flex-1 px-2 border border-gray-400 rounded-r-full bg-[#723EEB] text-white focus:outline-none select select-sm">
-                            {currency?.map((data: any) => (
-                                <option value={data?.name} key={data._id}>
+                            {currency?.map((data: any, index: number) => (
+                                <option value={data?.name} key={index}>
                                     {data?.name}
                                 </option>
                             ))}
@@ -141,9 +154,16 @@ const SubWalletModalForm: React.FC<ModalProps> = ({ handleWithdrawIntoWallet, ha
                         Forget PIN?
                     </button>
                 </div>
-                <div className='w-full mx-auto py-3'>
-                    <input className='w-full bg-[#723EEB] text-white p-2 rounded text-[10px]' type="submit" value="Confirm" />
+                <div className="w-full mx-auto py-3">
+                    <button
+                        type="submit"
+                        className="w-full bg-[#723EEB] text-white p-2 rounded text-[10px]">
+                        {loading ? <LoadingSpinner className='h-4 w-4' /> : 'Confirm'}
+                    </button>
                 </div>
+                {/* <div className='w-full mx-auto py-3'>
+                    <input className='w-full bg-[#723EEB] text-white p-2 rounded text-[10px]' type="submit" value="Confirm" />
+                </div> */}
             </div>
         </div>
     );

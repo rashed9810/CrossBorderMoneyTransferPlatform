@@ -2,33 +2,70 @@
 import React, { useState } from 'react';
 import useNavigationContext from '../NavigationContext/useNavigationContext';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+import LoadingSpinner from '../common/Loading/LoadingSpinner';
 
 interface FormData {
     email: string;
 }
 
 const ForgetPassword = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
     const { setOpenForgetPassword, setMessage }: any = useNavigationContext();
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const onSubmit = async (data: FormData) => {
-        setError('');
-        try {
-            const email = data.email;
-            const res = await axios.post('https://diasporex-api.vercel.app/api/v1/auth/forgot-password', { email });
-            if (res.status === 200) {
-                toast('You request has been proceeded');
-                setMessage(true);
+
+    async function onSubmit(values: any) {
+        const email = values.email;
+        if (email) {
+            try {
+                setLoading(true);
+                // const res = await axios.post(values.email);
+                const res = await fetch(
+                    `https://diasporex-api.vercel.app/api/v1/auth/forgot-password`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email })
+                    }
+                );
+                console.log(res);
+
+                if (res?.status === 200) {
+                    setLoading(false);
+                    toast.success('Password reset link sent to your email');
+                    reset();
+                } else {
+                    toast.error("No User found on this email");
+                    setLoading(false);
+                }
+            } catch (err: Error | any) {
+                setLoading(false);
+                toast.error("There is something wrong");
+                setError('Please provide a valid email');
             }
-        } catch (error: any) {
-            if (error.response.status === 404) {
-                setError("Please provide a valid email");
-            }
-        };
+        }
     }
+
+    // const onSubmit = async (data: FormData) => {
+    //     setError('');
+    //     try {
+    //         const email = data.email;
+    //         const res = await axios.post('https://diasporex-api.vercel.app/api/v1/auth/forgot-password', { email });
+    //         if (res.status === 200) {
+    //             toast('You request has been proceeded');
+    //             setMessage(true);
+    //         }
+    //     } catch (error: any) {
+    //         if (error.response.status === 404) {
+    //             setError("Please provide a valid email");
+    //         }
+    //     };
+    // }
 
     return (
         <div className='bg-white p-5 h-[100%] w-[550px] rounded-xl'>
@@ -63,17 +100,18 @@ const ForgetPassword = () => {
                         type="submit"
                         className="w-full md:px-4 py-2.5 bg-[#723EEB] text-white text-xs rounded-3xl hover:bg-[#6129e6] duration-500"
                     >
-                        Send Link
+                        {loading ? <LoadingSpinner className='h-4 w-4' /> : 'Send Link'}
                     </button>
                 </div>
                 <div className="text-center flex justify-center mb-4 items-center gap-1">
                     <div className="text-black text-sm flex justify-center items-center">
                         Already Have An Account?
                         <div
-                            onClick={() => setOpenForgetPassword(false)}
                             className="text-end text-[#723EEB] text-sm font-medium cursor-pointer ml-1"
                         >
-                            Login Now
+                            <Link href={'/auth/login'}>
+                                Login Now
+                            </Link>
                         </div>
                     </div>
                 </div>

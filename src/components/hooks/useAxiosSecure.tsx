@@ -1,67 +1,90 @@
-
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-
-
-const AUTH_TOKEN_KEY = 'accessToken';
-const REFRESH_TOKEN_KEY = 'refreshToken';
-let authToken: string | null = typeof window !== "undefined" ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
-let refreshToken = Cookies.get('refreshToken');
-
-export const setAuthTokens = (newAuthToken: string | null, newRefreshToken: string | null) => {
-    authToken = newAuthToken;
-    if (newAuthToken) {
-        typeof window !== "undefined" ? localStorage.setItem(AUTH_TOKEN_KEY, newAuthToken) : null;
-    } else {
-        typeof window !== "undefined" ? localStorage.removeItem(AUTH_TOKEN_KEY) : null
-    }
-};
-
+const BASE_API = 'https://diasporex-api.vercel.app/api/v1';
 const axiosInstance = axios.create({
-    baseURL: 'https://diasporex-api.vercel.app/api/v1',
+    baseURL: BASE_API
 });
 
 const useAxiosSecure = () => {
+
     axiosInstance.interceptors.request.use(
-        (config) => {
-            if (authToken) {
-                config.headers['Authorization'] = `${authToken}`;
+        async (config: any) => {
+            let token = null;
+            // Check if the environment is client-side
+            const isClient = typeof window !== 'undefined';
+            if (config.url !== '/auth/login' && config.url !== '/auth/register') {
+                if (isClient) {
+                    // client-side code: Cookies are available
+                    token = Cookies.get('accessToken');
+                } else {
+                    // server-side code: Cookies are not available
+                    const { cookies } = await import('next/headers');
+                    token = cookies().get('accessToken')?.value;
+                }
+                if (token) {
+                    config.headers['Authorization'] = token;
+                } else {
+                    return Promise.reject('Unauthorized');
+                }
             }
             return config;
         },
-        (error) => Promise.reject(error)
+        (error) => {
+            return Promise.reject(error);
+        }
     );
+    // Response interceptor to handle token expiration
     axiosInstance.interceptors.response.use(
-        (response) => {
-
-            Cookies.set('accessToken', response?.data?.data.accessToken, { expires: 1 });
-            Cookies.set('refreshToken', response?.data?.data.refreshToken);
-
-            typeof window !== "undefined" ? localStorage.setItem(AUTH_TOKEN_KEY, response?.data?.data.accessToken) : false;
-            return response
+        (response: AxiosResponse) => {
+            return response;
         },
         async (error) => {
             const originalRequest = error.config;
-            if (error.response?.status === 401 && !originalRequest._retry && refreshToken) {
+            if (error.response?.status === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
-                try {
-                    const response = await axiosInstance.post('/auth/refresh-token', { token: refreshToken });
-
-                    const newAuthToken = response.data.accessToken;
-                    setAuthTokens(newAuthToken, refreshToken); // Save new token to localStorage
-
-                    axiosInstance.defaults.headers.common['Authorization'] = `${newAuthToken}`;
-                    return axiosInstance(originalRequest);
-
-                } catch (err) {
-                    setAuthTokens(null, null); // Clear tokens on failure
-                    return Promise.reject(err);
+                const refreshToken = getCookie('refreshToken'); // Function to get cookie
+                if (refreshToken) {
+                    try {
+                        const response = await axios.post(
+                            `${BASE_API}/auth/refresh-token`,
+                            {},
+                            {
+                                headers: { Authorization: refreshToken }
+                            }
+                        );
+                        const { accessToken, refreshToken: newRefreshToken } =
+                            response.data.data;
+                        setCookie('accessToken', accessToken);
+                        setCookie('refreshToken', newRefreshToken);
+                        originalRequest.headers['Authorization'] = accessToken;
+                        return axiosInstance(originalRequest);
+                    } catch (refreshError) {
+                        console.error('Refresh token failed', refreshError);
+                    }
                 }
             }
             return Promise.reject(error);
         }
     );
-    return axiosInstance;
-};
+    // Cookie utility functions
+    const setCookie = (name: string, value: string) => {
+        Cookies.set(`${name}`, value, {
+            expires: 7,
+            secure: true,
+            sameSite: 'Strict'
+        });
+    };
+    const getCookie = (name: string) => {
+        const value = Cookies.get('accessToken');
+        const parts = value?.split(`; ${name}=`);
+        if (parts?.length === 2) {
+            return parts.pop()?.split(';').shift();
+        }
+        return null;
+    };
 
+    return axiosInstance;
+}
+
+// export default api;
 export default useAxiosSecure;
