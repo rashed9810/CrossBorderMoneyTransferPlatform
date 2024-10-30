@@ -37,7 +37,7 @@ const SelectDropdown: React.FC<DropdownProps> = ({
             <label className="block mb-1 font-semibold">{label}</label>
             <div
                 onClick={onToggle} // Toggle function passed from the parent
-                className={`mx-auto flex w-full items-center justify-between rounded-xl px-3 ${fixedValue ? 'py-2' : 'py-1'} border cursor-pointer text-xs`}
+                className={`mx-auto flex w-full items-center justify-between rounded-xl px-3 ${fixedValue ? 'py-2' : 'py-1'} border border-gray-400 cursor-pointer text-xs`}
             >
                 <h1 className="font-medium text-gray-700">{selectedOption ? selectedOption.name : <span className="text-gray-400">{placeholder ? placeholder : 'Select'}</span>}</h1>
                 <svg className={`${isOpen ? '-rotate-180' : 'rotate-0'} duration-300 ${fixedValue ? 'hidden' : 'block'}`} width={25} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

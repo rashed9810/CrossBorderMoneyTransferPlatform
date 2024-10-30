@@ -43,6 +43,7 @@ const LoginForm = () => {
     const userInfo = {
       email: data.email,
       password: data.password,
+      role: "USER"
     }
 
     setServerError('');

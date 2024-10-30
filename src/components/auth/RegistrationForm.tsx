@@ -42,6 +42,7 @@ const RegistrationForm = () => {
           name: data.fullName,
           email: data.email,
           password: data.password,
+          role: "USER"
         };
         const res = await axiosIntance.post('/auth/register', userInfo);
         if (res.status === 200) {

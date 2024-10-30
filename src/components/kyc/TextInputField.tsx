@@ -5,8 +5,9 @@ interface Props {
     validation?: any;
     errors: any;
     placeholder: string;
+    value?: string;
 }
-const TextInputKYC = ({ label, name, register, validation, errors, placeholder }: Props) => (
+const TextInputKYC = ({ label, name, register, validation, errors, placeholder, value }: Props) => (
     <>
       <label className="block mb-3 text-gray-700 font-bold">{label}</label>
       <input
@@ -14,6 +15,7 @@ const TextInputKYC = ({ label, name, register, validation, errors, placeholder }
         {...register(name, validation)}
         className={`w-full px-3 py-2 border rounded-xl focus:outline-none ${errors[name] ? 'border-red-500' : 'border-gray-300'}`}
         placeholder={placeholder}
+        defaultValue={value}
       />
       {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name].message}</p>}
     </>

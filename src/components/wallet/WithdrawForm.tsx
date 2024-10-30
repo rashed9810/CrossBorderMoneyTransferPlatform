@@ -14,6 +14,7 @@ interface FormData {
     amount: string;
     bankName: string;
     accountNumber: string;
+    holderName: string;
     transactionID: string;
     pin: number;
 };
@@ -30,6 +31,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
             amount: data.amount,
             bankName: data.bankName,
             accountNo: data.accountNumber,
+            holderName: data.holderName,
             walletId: mainWallet?.id,
             walletNumber: mainWallet?.walletId,
             pinNumber: parseInt(data.pin),
@@ -105,6 +107,21 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
                     />
                     {errors.accountNumber?.type === 'required' && (
                         <p className="text-red-500 text-xs">{errors.accountNumber.message}</p>
+                    )}
+                </div>
+                {/* Amount Field */}
+                <div className="mb-3">
+                    <label className="text-[14px]">Holder Name</label>
+                    <input
+                        type="text"
+                        {...register("holderName", {
+                            required: "HolderName is required",
+                        })}
+                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold text-[14px]`}
+                        placeholder="Enter HolderName Here....."
+                    />
+                    {errors.holderName?.type === 'required' && (
+                        <p className="text-red-500 text-xs">{errors.holderName.message}</p>
                     )}
                 </div>
                 {/* Pin Field */}
