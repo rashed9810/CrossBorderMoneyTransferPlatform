@@ -19,6 +19,7 @@ interface FormValues {
   phone: string;
   bankName: string;
   accountNumber: string;
+  
 }
 
 const CreateRecipientForm: React.FC = () => {
@@ -29,6 +30,9 @@ const CreateRecipientForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
 
+  
+
+
   const {
     register,
     handleSubmit,
@@ -36,6 +40,10 @@ const CreateRecipientForm: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<FormValues>();
+
+
+
+
 
 
   const onSubmit = async (data: FormValues) => {
@@ -51,7 +59,7 @@ const CreateRecipientForm: React.FC = () => {
       setSubmitError("An error occurred. Please try again later");
       toast.error(error?.response?.data?.message || "An error occurred. Please try again later");
     });
-    // const createdRecipient = await CreateRecipient(data);
+    
   };
 
 

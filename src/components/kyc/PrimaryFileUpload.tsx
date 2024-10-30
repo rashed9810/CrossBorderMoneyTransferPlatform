@@ -43,8 +43,8 @@ const PrimaryFileUpload = ({ control, errors, register, setProfileFilePath, setB
         />
       </div>
       <div className="w-full">
+          <h1  className=" text-gray-700 font-bold mb-3">Front Part*</h1>
         <label className="block text-gray-700 font-bold space-y-3">
-          <h1>Front Part*</h1>
           <Controller
             control={control}
             name="frontPart"
@@ -101,8 +101,8 @@ const PrimaryFileUpload = ({ control, errors, register, setProfileFilePath, setB
       </div>
 
       <div className="w-full">
+          <h1  className=" text-gray-700 font-bold mb-3">Back Part*</h1>
         <label className="block text-gray-700 font-bold space-y-3">
-          <h1>Back Part*</h1>
           <Controller
             control={control}
             name="backPart"

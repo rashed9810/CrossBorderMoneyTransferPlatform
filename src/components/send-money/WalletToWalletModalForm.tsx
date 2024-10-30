@@ -12,23 +12,38 @@ import openEye from '../../../public/svg/openEye.svg';
 export interface TransactionPreparedTypes {
     id: string,
     amount: number,
-    recipientsWalletNumber: string;
+    recipientWalletNumber: string;
     senderCurrentBalance: number;
     transactionAfterBalance: number;
     walletType: string;
+
+    
 }
 export interface TransferTypes {
     transferInfo: TransactionPreparedTypes | null;
     setWalletModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+    currencySymbol: string;
+   
 }
 
-const WalletToWalletModalForm = ({ transferInfo, setWalletModalOpen }: TransferTypes) => {
+
+
+const WalletToWalletModalForm = ({ transferInfo, currencySymbol, setWalletModalOpen }: TransferTypes) => {
     const [isLoading, setIsLoading] = useState(false);
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const passwordRef = React.createRef<HTMLInputElement>();
     const axiosInstance = useAxiosSecure();
-    const router: any = useRouter();
+    const router: ReturnType<typeof useRouter> = useRouter();
 
+
+    
+    
+    
+   
+   
+   
+   
     const handleSubmit = async () => {
         const password = {
             pinNumber: parseInt(passwordRef.current?.value as string)
@@ -43,28 +58,32 @@ const WalletToWalletModalForm = ({ transferInfo, setWalletModalOpen }: TransferT
             } else {
                 toast.error(res?.data.message);
             }
-        } catch (err: any) { // Add type 'any' to include the 'response' property
-            toast.error(err?.response?.data?.message);
+        } catch (err: unknown) {  
+            
+            if (err instanceof Error && (err as any).response) {
+                toast.error((err as any)?.response?.data?.message);
+            }
         } finally {
             setIsLoading(false)
         }
     }
 
+
     return (
         <div className={`transition-opacity duration-300 ease-in-out space-y-2`}>
             <div className='mt-1 mb-2 space-y-1 font-semibold text-sm'>
                 <h5>Transfer Wallet: {transferInfo?.walletType}</h5>
-                <h5>Transfer Amount: {transferInfo?.amount}$</h5>
-                <h5>Recipients Wallet: {transferInfo?.recipientsWalletNumber}</h5>
+                <h5>Transfer Amount: {transferInfo?.amount+ currencySymbol}</h5>
+                <h5>Recipients Wallet ID: {transferInfo?.recipientWalletNumber}</h5>
             </div>
             <div className='flex flex-row w-full'>
                 <div className='border p-2 flex-1 space-y-2'>
                     <h5 className="text-sm">Your Current Wallet Balance: </h5>
-                    <h4 className="flex flex-row justify-end">{transferInfo?.senderCurrentBalance}$</h4>
+                    <h4 className="flex flex-row justify-end">{transferInfo?.senderCurrentBalance+ currencySymbol}</h4>
                 </div>
                 <div className='border p-2 flex-1 space-y-2'>
                     <h5 className="text-sm">Balance after Transaction: </h5>
-                    <h4 className="flex flex-row justify-end">{transferInfo?.transactionAfterBalance}$</h4>
+                    <h4 className="flex flex-row justify-end">{transferInfo?.transactionAfterBalance+ currencySymbol}</h4>
                 </div>
             </div>
             <div className="w-full my-2">
@@ -92,4 +111,4 @@ const WalletToWalletModalForm = ({ transferInfo, setWalletModalOpen }: TransferT
     );
 };
 
-export default WalletToWalletModalForm;
+export default WalletToWalletModalForm; 
