@@ -23,8 +23,8 @@ const KYCPage = () => {
                     <button className={`${kycForm === 'primary' ? 'border-x border-t border-black p-1' : ''}`}
                         onClick={() => handleKYC('primary')}>Primary KYC</button>
 
-                    <button className={`${kycForm === 'secondary' ? 'border-x border-t border-black p-1' : ''}`}
-                        onClick={() => handleKYC('secondary')}>Secondary KYC</button>
+                    {/* <button className={`${kycForm === 'secondary' ? 'border-x border-t border-black p-1' : ''}`}
+                        onClick={() => handleKYC('secondary')}>Secondary KYC</button> */}
                 </div>
                 <div>
                     {
