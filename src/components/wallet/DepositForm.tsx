@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import LoadingSpinner from '../common/Loading/LoadingSpinner';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 import useMainWallet from '../hooks/useMainWallet';
+import useBankInfos from '../hooks/useBankInfos';
 
 interface ModalProps {
     handleForgetPIN: (value: any) => void;
@@ -18,25 +19,39 @@ interface FormData {
 }
 const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpen }) => {
     const [loading, setLoading] = useState(false);
+    const [copyId, setCopyId] = useState(false);
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
     const [pin, setPin] = useState(false);
     const [mainWallet, mainWalletRefetch] = useMainWallet();
+    const { bankInfos } = useBankInfos();
+    const { transactionId, bankNumber, name, id } = bankInfos;
     const axiosInstance = useAxiosSecure();
-    console.log(mainWallet);
+
+    const handleCopy = (item: 'copyId' | 'copyLink') => {
+        if (item === 'copyId') {
+            navigator.clipboard.writeText(transactionId as string)
+            toast.success("Copied ID!")
+            setCopyId(true)
+            setTimeout(() => {
+                setCopyId(false)
+            }, 2000)
+        }
+    }
 
     const onSubmit = async (data: any) => {
         setLoading(true);
         const depositInfo = {
-            amount: data.amount,
-            bankDetails: data.bank_accountNumber,
-            transactionId: data.transactionID,
+            amount: parseFloat(data.amount),
+            bankId: id,
             walletId: mainWallet?.id,
             walletNumber: mainWallet?.walletId,
+            transactionId,
             pinNumber: parseInt(data.pin),
         };
+
         try {
             const res = await axiosInstance.post('/wallet/create-deposit', depositInfo);
-
+            console.log(res);
             if (res.status === 200) {
                 reset();
                 mainWalletRefetch();
@@ -80,33 +95,40 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
 
                 {/* Bank and Account number Field */}
                 <div className="mb-3">
-                    <label className="text-[14px]">Deposit Bank and Account Number</label>
+                    <label className=" mb-1 text-gray-600 font-semibold text-xs lg:text-sm ">Deposit Bank and Account Number</label>
                     <input
+                        readOnly
                         type="text"
                         {...register("bank_accountNumber", {
                             required: "Bank and Account Number is required",
                         })}
                         className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold placeholder:text-xs text-sm`}
-                        placeholder="Asia Bank | 123032420234"
+                        // placeholder="Asia Bank | 123032420234"
+                        value={`${name || 'Bank Name'} | ${bankNumber || 'Account Number'}`}
                     />
                     {errors.bank_accountNumber?.type === 'required' && (
                         <p className="text-red-500 text-xs">{errors.bank_accountNumber.message}</p>
                     )}
                 </div>
-                {/* Transaction ID Field */}
-                <div className="mb-3">
-                    <label className="text-[14px]">Enter Transaction ID</label>
-                    <input
-                        type="text"
-                        {...register("transactionID", {
-                            required: "Transaction ID is required",
-                        })}
-                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold placeholder:text-xs text-sm`}
-                        placeholder="Enter Transaction ID....."
-                    />
-                    {errors.transactionID?.type === 'required' && (
-                        <p className="text-red-500 text-xs">{errors.transactionID.message}</p>
-                    )}
+                {/* Reference id */}
+                <div className='flex flex-row items-end text-xs lg:text-base w-full mb-3'>
+                    <div className='w-full '>
+                        <label className="block mb-1 text-gray-600 font-semibold text-xs lg:text-sm ">Copy Reference ID</label>
+                        <input
+                            className='mt-1 w-full px-3 py-1 border border-gray-400 rounded-l-2xl focus:outline-none font-semibold placeholder:text-xs text-sm'
+                            type="text"
+                            name="transactionID"
+                            placeholder={`${transactionId || 'Reference Id'}`}
+                            readOnly
+                        />
+                    </div>
+                    <div onClick={() => handleCopy('copyId')} id="copyId" className='cursor-pointer border-y-[1px] border-r-[1px] rounded-r-2xl border-gray-400 w-12 py-[7.5px] flex justify-center items-center'>
+                        {
+                            !copyId ? <svg width="13" height="13" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0V8.33333H2.91667V7.5H0.833333V0.833333H5.83333V1.25H6.66667V0H0ZM3.33333 1.66667V10H10V1.66667H3.33333ZM4.16667 2.5H9.16667V9.16667H4.16667V2.5Z" fill="#723EEB" />
+                            </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        }
+                    </div>
                 </div>
                 {/* Pin Field */}
                 <div className="mb-3">

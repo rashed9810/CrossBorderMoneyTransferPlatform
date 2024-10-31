@@ -2,17 +2,20 @@ import Modal from '../common/Modal/Modal';
 import React, { useState } from 'react';
 import DepositForm from './DepositForm';
 import ForgetPINModal from '../common/ForgetPINModal/ForgetPINModal';
+import useBankInfos from '../hooks/useBankInfos';
 
 const DepositModal = () => {
     const [isDepositModalOpen, setDepositModalOpen] = useState(false);
     const [isForgetPINModalOpen, setForgetPINModalOpen] = useState(false);
     const [walletInfo, setWalletInfo] = useState({});
+    const { bankRefetch } = useBankInfos();
 
     const handleDeposit = () => {
         setDepositModalOpen(true);
+        bankRefetch();
     };
 
-    const handleForgetPIN = (walletInfo : any) => {
+    const handleForgetPIN = (walletInfo: any) => {
         setWalletInfo(walletInfo);
         setForgetPINModalOpen(true);
         setDepositModalOpen(false);

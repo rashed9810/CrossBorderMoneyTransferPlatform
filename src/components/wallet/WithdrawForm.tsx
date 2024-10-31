@@ -28,7 +28,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
 
     const onSubmit = async (data: any) => {
         const withdrawInfo = {
-            amount: data.amount,
+            amount: parseFloat(data.amount),
             bankName: data.bankName,
             accountNo: data.accountNumber,
             holderName: data.holderName,
@@ -48,7 +48,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
             }
         } catch (error: any) {
             if (error) {
-                toast.error("There is something wrong.Please try again");
+                toast.error(error?.response?.data?.message);
             }
         }
         setLoading(false);
@@ -170,7 +170,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
                         type="submit"
                         className="w-full bg-[#ea5455] text-white p-2 rounded text-[10px]"
                     >
-                        {loading ? <LoadingSpinner className='h-4 w-4' /> : 'Confirm Withdraw'}
+                        {loading ? <LoadingSpinner className='h-3 w-3' /> : 'Confirm Withdraw'}
                         {/* Confirm Withdraw */}
                     </button>
                 </div>
