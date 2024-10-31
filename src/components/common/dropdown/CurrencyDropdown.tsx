@@ -38,7 +38,7 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps & { isOpen?: boolean; onT
     return (
         <div className="relative w-full text-xs xl:text-sm">
             <label className="block mb-1 font-semibold">{label}</label>
-            <div className="border rounded-xl flex">
+            <div className="border border-gray-400 rounded-xl flex">
                 <div className="mx-auto flex w-full items-center px-3 py-1 cursor-pointer rounded-l-xl">
                     {Object.keys(selectedValue).length !== 0 && (
                         <div className="relative w-5 h-5 mr-2">

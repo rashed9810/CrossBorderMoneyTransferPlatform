@@ -17,7 +17,7 @@ const VerifyEmail = () => {
             try {
                 setIsLoading(true);
                 const response = await fetch(
-                    `https://diasporex-api.vercel.app/api/v1/auth/verify-email?token=${token}`,
+                    `http://209.74.71.58:5000/api/v1/auth/verify-email?token=${token}`,
                     {
                         method: 'POST',
                         headers: {

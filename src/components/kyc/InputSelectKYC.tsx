@@ -1,7 +1,5 @@
 import React from 'react'
 import SelectOptions from '@/components/shared/Select-options';
-import useMainWallet from '@/components/hooks/useMainWallet';
-import useSubWallets from '@/components/hooks/useSubWallets';
 import useCurrency from '../hooks/useCurrency';
 
 interface PropTypes {
@@ -10,13 +8,12 @@ interface PropTypes {
   placeholder: string
   error: string;
   name: string;
-  borderColor?: boolean | undefined
+  borderColor?: boolean | undefined;
+  value?: string;
 }
-const InputSelectKYC = ({ control, label, placeholder, error, name, borderColor }: PropTypes) => {
-  const [mainWallet, isPending] = useMainWallet()
-  const [subWallet] = useSubWallets();
+const InputSelectKYC = ({ control, label, placeholder, error, name, borderColor, value }: PropTypes) => {
   const [currency] = useCurrency();
-  const walletOptions = [mainWallet, ...subWallet]
+
   let options = null
   if (name === 'documentType') {
     options = [
@@ -25,26 +22,37 @@ const InputSelectKYC = ({ control, label, placeholder, error, name, borderColor 
         label: 'Passport'
       },
       {
-        value: 'National ID',
-        label: 'National ID'
+        value: 'GOVT_ID',
+        label: 'GOVT ID'
       },
       {
-        value: 'Drivers License',
-        label: 'Drivers License'
+        value: 'DRIVING_LICENSE',
+        label: 'DRIVING LICENSE'
       }
+      // {
+      //   value: 'Drivers License',
+      //   label: 'Drivers License'
+      // }
     ]
   }
   if (name === 'country') {
-    const countries = currency?.map((data: any) => {
-      const op = {
-        value: data?.country,
-        label: data?.country
-      }
-      return op
-    })
-    options = [
-      ...countries
-    ];
+    options =
+      [
+        {
+          value: value,
+          label: value,
+        }
+      ]
+    // const countries = currency?.map((data: any) => {
+    //   const op = {
+    //     value: data?.country,
+    //     label: data?.country
+    //   }
+    //   return op
+    // })
+    // options = [
+    //   ...countries
+    // ];
 
   }
   return (

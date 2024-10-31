@@ -22,6 +22,7 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
     const [pin, setPin] = useState(false);
     const [mainWallet, mainWalletRefetch] = useMainWallet();
     const axiosInstance = useAxiosSecure();
+    console.log(mainWallet);
 
     const onSubmit = async (data: any) => {
         setLoading(true);
@@ -69,7 +70,7 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
                         {...register("amount", {
                             required: "Amount is required",
                         })}
-                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold text-[14px]`}
+                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold placeholder:text-xs text-sm`}
                         placeholder="Enter Amount Here....."
                     />
                     {errors.amount?.type === 'required' && (
@@ -85,7 +86,7 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
                         {...register("bank_accountNumber", {
                             required: "Bank and Account Number is required",
                         })}
-                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold text-[14px]`}
+                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold placeholder:text-xs text-sm`}
                         placeholder="Asia Bank | 123032420234"
                     />
                     {errors.bank_accountNumber?.type === 'required' && (
@@ -100,7 +101,7 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
                         {...register("transactionID", {
                             required: "Transaction ID is required",
                         })}
-                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold text-[14px]`}
+                        className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold placeholder:text-xs text-sm`}
                         placeholder="Enter Transaction ID....."
                     />
                     {errors.transactionID?.type === 'required' && (
@@ -118,7 +119,7 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
                                 minLength: 4,
                                 pattern: /^[0-9]*$/
                             })}
-                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-[10px] focus:outline-none placeholder:text-xs text-sm`}
+                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none placeholder:text-xs text-sm`}
                             placeholder="Enter PIN...."
                         />
                         <span

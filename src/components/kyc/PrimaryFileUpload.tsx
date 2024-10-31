@@ -1,28 +1,45 @@
 import { Controller } from "react-hook-form"
 import InputSelectKyc from "./InputSelectKYC"
+import { useState } from "react"
+import Image from "next/image"
 interface PropTypes {
-    control?: any
-    errors: any
-    register: any
+  control?: any
+  errors: any
+  register: any
+  setProfileFilePath: any
+  setBackProfileFilePath: any
 }
-const PrimaryFileUpload = ({ control, errors, register }: PropTypes) => {
+const PrimaryFileUpload = ({ control, errors, register, setProfileFilePath, setBackProfileFilePath }: PropTypes) => {
+  const [profile, setProfile] = useState<string | null>();
+  const [backProfile, setBackProfile] = useState<string | null>();
+
+
   const handleFileChange = (e: any, onChange: any) => {
     const file = e.target.files[0];
     if (file) {
-      onChange(file); 
+      const fileURL = URL.createObjectURL(file);
+      onChange(file);
+
+      if (e.target.name === "frontPart") {
+        setProfile(fileURL); 
+        setProfileFilePath(file); 
+      } else {
+        setBackProfile(fileURL);
+        setBackProfileFilePath(file); 
+      }
     }
-     
-};
-    return (
-      <div className="flex flex-col lg:flex-row justify-between items-start w-full gap-3 lg:gap-10 my-3">
-      <div className="mb-0 w-full">
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row justify-between items-start w-full gap-3 lg:gap-10 my-3">
+      <div className="mb-4 w-full">
         <InputSelectKyc
-            name="documentType"
-            label="Document Type*"
-            control={control}
-            error="Please select document type"
-            placeholder="Select Document Type"
-            borderColor={true}
+          name="documentType"
+          label="Document Type*"
+          control={control}
+          error="Please select document type"
+          placeholder="Select Document Type"
+          borderColor={true}
         />
       </div>
       <div className="w-full">
@@ -32,12 +49,14 @@ const PrimaryFileUpload = ({ control, errors, register }: PropTypes) => {
             control={control}
             name="frontPart"
             rules={{ required: 'Front part document is required' }}
-            render={({ field: {onChange, value} }) => (
+            render={({ field: { onChange, value } }) => (
               <div
-                className={`border-[1.5px] rounded-xl border-dashed h-16 flex items-center justify-center cursor-pointer ${
-                  errors.frontPart ? 'border-red-500' : 'border-gray-200'
-                }`}
+                className={`border-[1.5px] rounded-xl border-dashed flex flex-col items-center justify-center ${profile ? 'h-20' : ' h-16'} cursor-pointer ${errors.frontPart ? 'border-red-500' : 'border-gray-200'
+                  }`}
               >
+                <div className="face-img overflow-hidden">
+                  <Image className={`${profile ? 'rounded-xl object-cover' : 'hidden'}`} src={profile as unknown as string} width={100} height={100} alt="face" />
+                </div>
                 <input
                   id="frontPart"
                   type="file"
@@ -88,12 +107,14 @@ const PrimaryFileUpload = ({ control, errors, register }: PropTypes) => {
             control={control}
             name="backPart"
             rules={{ required: 'Back part document is required' }}
-              render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <div
-                className={`border-[1.5px] rounded-xl border-dashed h-16 flex items-center justify-center cursor-pointer ${
-                  errors.backPart ? 'border-red-500' : 'border-gray-200'
-                }`}
+                className={`border-[1.5px] rounded-xl border-dashed flex flex-col items-center justify-center ${backProfile ? 'h-20' : 'h-16'} cursor-pointer ${errors.backPart ? 'border-red-500' : 'border-gray-200'
+                  }`}
               >
+                <div className="face-img overflow-hidden">
+                  <Image className={`${backProfile ? 'rounded-xl object-cover' : 'hidden'}`} src={backProfile as unknown as string} width={100} height={100} alt="face" />
+                </div>
                 <input
                   id="backPart"
                   type="file"
@@ -139,6 +160,6 @@ const PrimaryFileUpload = ({ control, errors, register }: PropTypes) => {
         </label>
       </div>
     </div>
-    )
+  )
 }
 export default PrimaryFileUpload
