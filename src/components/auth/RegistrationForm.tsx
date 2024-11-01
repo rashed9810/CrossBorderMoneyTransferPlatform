@@ -244,9 +244,9 @@ const RegistrationForm = () => {
         </div>
       </form>
       {/* Social Login */}
-      <div>
+{/*       <div>
         <SocialLogin />
-      </div>
+      </div> */}
     </div>
   );
 };
