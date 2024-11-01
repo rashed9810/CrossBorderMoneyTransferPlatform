@@ -20,14 +20,11 @@ interface FormData {
     image?: File;
 };
 
-// const image_hosing_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
 const UserUpdateForm = () => {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>();
     const [user, refetch] = useUserProfile();
-    console.log(user);
     const axiosInstance = useAxiosSecure();
-    const { city, address, phoneNumber, state, zipCode, country } = user;
+    const { city, address, phoneNumber, state, zipCode, country, email, name, dpxId, isKycVerified } = user;
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -100,12 +97,12 @@ const UserUpdateForm = () => {
                             </div>
                         </label>
 
-                        <h3 className="font-semibold text-xs mt-1 text-[#723EEB]">ID : DPX0005</h3>
+                        <h3 className="font-semibold text-xs mt-1 text-[#723EEB]">ID : {dpxId}</h3>
 
                     </div>
                     <div>
-                        <h3 className="text-xs font-semibold text-[#723EEB]">khalilcherry</h3>
-                        <p className='text-[8px] text-gray-400 mt-4'>khalilcherry@gmail.com</p>
+                        <h3 className="text-xs font-semibold text-[#723EEB]">{name}</h3>
+                        <p className='text-[10px] text-gray-400 mt-4'>{email}</p>
                     </div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className='pt-20'>
@@ -115,10 +112,12 @@ const UserUpdateForm = () => {
                             <input
                                 type="text"
                                 {...register("country", {
+                                    disabled: isKycVerified && true
                                 })}
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter Country..."
                                 defaultValue={country}
+                                
                             />
                         </div>
                         <div className="lg:w-1/2">
@@ -126,6 +125,7 @@ const UserUpdateForm = () => {
                             <input
                                 type="text"
                                 {...register("phone", {
+                                    disabled: isKycVerified && true
                                 })}
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter Phone..."
@@ -139,6 +139,7 @@ const UserUpdateForm = () => {
                             <input
                                 type="text"
                                 {...register("address", {
+                                    disabled: isKycVerified && true
                                 })}
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter Address..."
@@ -150,6 +151,7 @@ const UserUpdateForm = () => {
                             <input
                                 type="text"
                                 {...register("city", {
+                                    disabled: isKycVerified && true
                                 })}
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter City..."
@@ -163,6 +165,7 @@ const UserUpdateForm = () => {
                             <input
                                 type="text"
                                 {...register("state", {
+                                    disabled: isKycVerified && true
                                 })}
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter State..."
@@ -174,6 +177,7 @@ const UserUpdateForm = () => {
                             <input
                                 type="string"
                                 {...register("zipCode", {
+                                    disabled: isKycVerified && true
                                 })}
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter Zip..."
@@ -184,7 +188,8 @@ const UserUpdateForm = () => {
                     <div className="w-3/4 mx-auto pb-3 lg:pb-0 lg:mt-5">
                         <button
                             type="submit"
-                            className="w-full cursor-pointer bg-[#723EEB] text-white p-1 rounded-[5px] text-sm">
+                            disabled = {isKycVerified && true}
+                            className={`w-full ${isKycVerified ? 'cursor-not-allowed' : 'cursor-pointer'} bg-[#723EEB] text-white p-1 rounded-[5px] text-sm`}>
                             {loading ? <LoadingSpinner className='h-4 w-4' /> : 'Update'}
                         </button>
                     </div>

@@ -13,9 +13,10 @@ export interface TransactionPreparedTypes {
     id: string,
     amount: number,
     recipientWalletNumber: string;
-    senderCurrentBalance: number;
+    transactionBeforeBalance: number;
     transactionAfterBalance: number;
     walletType: string;
+    currencySymbol: string;
 
     
 }
@@ -73,17 +74,18 @@ const WalletToWalletModalForm = ({ transferInfo, currencySymbol, setWalletModalO
         <div className={`transition-opacity duration-300 ease-in-out space-y-2`}>
             <div className='mt-1 mb-2 space-y-1 font-semibold text-sm'>
                 <h5>Transfer Wallet: {transferInfo?.walletType}</h5>
-                <h5>Transfer Amount: {transferInfo?.amount+ currencySymbol}</h5>
+                <h5>Transfer Amount: {transferInfo?.amount}{ transferInfo?.currencySymbol}</h5>
+                
                 <h5>Recipients Wallet ID: {transferInfo?.recipientWalletNumber}</h5>
             </div>
             <div className='flex flex-row w-full'>
                 <div className='border p-2 flex-1 space-y-2'>
                     <h5 className="text-sm">Your Current Wallet Balance: </h5>
-                    <h4 className="flex flex-row justify-end">{transferInfo?.senderCurrentBalance+ currencySymbol}</h4>
+                    <h4 className="flex flex-row justify-end">{transferInfo?.transactionBeforeBalance} { transferInfo?.currencySymbol}</h4>
                 </div>
                 <div className='border p-2 flex-1 space-y-2'>
                     <h5 className="text-sm">Balance after Transaction: </h5>
-                    <h4 className="flex flex-row justify-end">{transferInfo?.transactionAfterBalance+ currencySymbol}</h4>
+                    <h4 className="flex flex-row justify-end">{transferInfo?.transactionAfterBalance }{ transferInfo?.currencySymbol}</h4>
                 </div>
             </div>
             <div className="w-full my-2">

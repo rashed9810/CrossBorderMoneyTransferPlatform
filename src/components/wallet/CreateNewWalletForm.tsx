@@ -11,6 +11,7 @@ import useMainWallet from '../hooks/useMainWallet';
 import useSubWallets from '../hooks/useSubWallets';
 import { decodedUser } from '../hooks/useUser';
 import DiasporexButton from '../ui/button/DiasporexButton';
+import useUserProfile from '../hooks/useUserProfile';
 
 interface FormData {
     walletName: string;
@@ -83,7 +84,9 @@ const securityQuestionOptions = [
 
 const CreateNewWalletForm = () => {
     const [loading, setLoading] = useState(false);
-    const user = decodedUser as any;
+    // const user = decodedUser as any;
+    const [user] = useUserProfile();
+    console.log(user);
     const [isOpen, setIsOpen] = useState(false);
     const [currency, , isPending, currencyLoading] = useCurrency();
     const [securityQuestion, setSecurityQuestion] = useState(securityQuestionOptions[0].value);
@@ -107,6 +110,7 @@ const CreateNewWalletForm = () => {
                     currencyId: selectCurrency?.id,
                     category: 'PRIMARY',
                     walletEmail: user?.email,
+                    // walletEmail: data?.email,
                     walletName: data?.walletName,
                     securityQuestion: securityQuestion,
                     answer: data?.answer,
@@ -125,6 +129,7 @@ const CreateNewWalletForm = () => {
                     currencyId: selectCurrency?.id,
                     category: 'SECONDARY',
                     walletEmail: user?.email,
+                    // walletEmail: data.email,
                     walletName: data?.walletName,
                     securityQuestion: securityQuestion,
                     answer: data?.answer,
@@ -169,7 +174,7 @@ const CreateNewWalletForm = () => {
     return (
         <>
             <form className='text-[10px] text-xs xl:text-sm' onSubmit={handleSubmit(onSubmit)}>
-                <h3 className="font-semibold pb-3 text-base">Create {mainWallet ? 'New Sub' : 'New'} Wallet</h3>
+                <h3 className="font-semibold pb-3 text-base">Create {mainWallet?.id ? 'New Sub' : 'New'} Wallet</h3>
                 {/* wallet name Field */}
                 <div className="mb-3">
                     <label className="text-gray-700 font-semibold text-xs xl:text-sm">Wallet Name</label>

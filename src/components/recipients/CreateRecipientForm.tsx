@@ -9,17 +9,15 @@ import CardSubTitle from "../common/cardSubTitle/CardSubTitle";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import useCurrency from "../hooks/useCurrency";
 
-
-
 interface FormValues {
   fullName: string;
+  currency: string;  
   email: string;
   country: string;
   city: string;
   phone: string;
   bankName: string;
   accountNumber: string;
-  
 }
 
 const CreateRecipientForm: React.FC = () => {
@@ -28,10 +26,7 @@ const CreateRecipientForm: React.FC = () => {
   const [currency] = useCurrency();
   const axiosInstance = useAxiosSecure();
   const [loading, setLoading] = useState<boolean>(false);
-
-
-  
-
+  console.log(currency)
 
   const {
     register,
@@ -40,11 +35,6 @@ const CreateRecipientForm: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<FormValues>();
-
-
-
-
-
 
   const onSubmit = async (data: FormValues) => {
     setSubmitError("");
@@ -59,9 +49,7 @@ const CreateRecipientForm: React.FC = () => {
       setSubmitError("An error occurred. Please try again later");
       toast.error(error?.response?.data?.message || "An error occurred. Please try again later");
     });
-    
   };
-
 
   return (
     <div>
@@ -69,18 +57,36 @@ const CreateRecipientForm: React.FC = () => {
       <CardSubTitle title="Create Recipient" />
       <div className="bg-white px-2 lg:px-6 py-10 rounded-2xl text-xs my-5">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full mb-4">
-            <label className="block mb-3 font-semibold">Full Name*</label>
-            <input
-              type="text"
-              {...register("fullName", {
-                required: "Full name is required",
-                minLength: { value: 2, message: "Full name must be at least 2 characters long" },
-              })}
-              className={`w-full px-3 py-2 border ${errors.fullName ? "border-red-500" : "border-gray-300"} outline-none rounded-xl`}
-              placeholder="Enter Full Name ..."
-            />
-            {errors.fullName && <div className="text-red-500 text-xs mt-1">{errors.fullName.message}</div>}
+          <div className="flex flex-col lg:flex-row w-full gap-4 mb-4">
+            <div className="lg:w-1/2">
+              <label className="block mb-3 font-semibold">Full Name*</label>
+              <input
+                type="text"
+                {...register("fullName", {
+                  required: "Full name is required",
+                  minLength: { value: 2, message: "Full name must be at least 2 characters long" },
+                })}
+                className={`w-full px-3 py-2 border ${errors.fullName ? "border-red-500" : "border-gray-300"} outline-none rounded-xl`}
+                placeholder="Enter Full Name ..."
+              />
+              {errors.fullName && <div className="text-red-500 text-xs mt-1">{errors.fullName.message}</div>}
+            </div>
+
+            <div className="lg:w-1/2">
+              <label className="block mb-3 font-semibold">Currency*</label>
+              <select
+                {...register("currency", { required: "Currency is required" })}
+                className={`w-full px-3 py-2 border cursor-pointer ${errors.currency ? "border-red-500" : "border-gray-300"} outline-none rounded-xl`}
+              >
+                <option value="" disabled>Select Currency</option>
+                {currency?.map((curr: any) => (
+                  <option key={curr.id} value={curr?.code}>
+                    {curr?.code}
+                  </option>
+                ))}
+              </select>
+              {errors.currency && <div className="text-red-500 text-xs mt-1">{errors.currency.message}</div>}
+            </div>
           </div>
 
           <div className="flex flex-col lg:flex-row w-full gap-4 mb-4">
@@ -125,14 +131,11 @@ const CreateRecipientForm: React.FC = () => {
               <select
                 {...register("country", { required: "Country is required" })}
                 className={`w-full px-3 py-2 border cursor-pointer ${errors.country ? "border-red-500" : "border-gray-300"} outline-none rounded-xl`}
-              >   <option disabled value="">Select Country</option>
-                {
-
-                  currency?.map((currency: any) => (
-                    <option key={currency.id} value={currency?.country}>{currency?.country}</option>
-                  ))
-                }
-
+              >
+                <option disabled value="">Select Country</option>
+                {currency?.map((currency: any) => (
+                  <option key={currency.id} value={currency?.country}>{currency?.country}</option>
+                ))}
               </select>
               {errors.country && <div className="text-red-500 text-xs mt-1">{errors.country.message}</div>}
             </div>
@@ -144,7 +147,6 @@ const CreateRecipientForm: React.FC = () => {
                 {...register("city", { required: "City is required" })}
                 className={`w-full px-3 py-2 border ${errors.city ? "border-red-500" : "border-gray-300"} outline-none rounded-xl`}
                 placeholder="Enter City ..."
-
               />
               {errors.city && <div className="text-red-500 text-xs mt-1">{errors.city.message}</div>}
             </div>
@@ -153,18 +155,22 @@ const CreateRecipientForm: React.FC = () => {
           <div className="flex flex-col lg:flex-row w-full gap-4 mb-4">
             <div className="lg:w-1/2">
               <label className="block mb-3 font-semibold">Bank Name*</label>
-              <select
-                {...register("bankName", { required: "Bank name is required" })}
+              <input
+                type="text"
+                {...register("bankName", {
+                  required: "Bank name is required",
+                  minLength: {
+                    value: 4,
+                    message: "Bank name must be at least 2 characters long"
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9\s'-]+$/,
+                    message: "Bank name can only contain letters, numbers, spaces, hyphens and apostrophes"
+                  }
+                })}
                 className={`w-full px-3 py-2 border ${errors.bankName ? "border-red-500" : "border-gray-300"} outline-none rounded-xl`}
-              >
-                <option value="">Select Bank</option>
-                <option value="BankOfAmerica">Bank of America</option>
-                <option value="FidelityBankPlc">Fidelity Bank Plc</option>
-                <option value="WellsFargo">Wells Fargo</option>
-                <option value="RoyalBankofCanada">Royal Bank of Canada</option>
-                <option value="Rupali">Rupali</option>
-
-              </select>
+                placeholder="Enter Bank Name ..."
+              />
               {errors.bankName && <div className="text-red-500 text-xs mt-1">{errors.bankName.message}</div>}
             </div>
             <div className="lg:w-1/2">
