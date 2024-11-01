@@ -11,7 +11,7 @@ const SocialLogin = () => {
   return (
     <>
       {/* <div className='flex flex-col items-center '> */}
-      <div
+{/*       <div
         className={`flex justify-between items-center overflow-hidden ${route === `/auth/login` ? "my-4" : "my-4"
           }`}
       >
@@ -41,7 +41,7 @@ const SocialLogin = () => {
             {route === "/auth/login" ? "Login with Google" : "Google"}
           </p>
         </div>
-      </button>
+      </button> */}
       {/* </div> */}
       {route === "/auth/login" ? (
         <div className="text-center flex justify-center mt-4 items-center gap-1">
