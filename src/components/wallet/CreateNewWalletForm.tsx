@@ -86,7 +86,6 @@ const CreateNewWalletForm = () => {
     const [loading, setLoading] = useState(false);
     // const user = decodedUser as any;
     const [user] = useUserProfile();
-    console.log(user);
     const [isOpen, setIsOpen] = useState(false);
     const [currency, , isPending, currencyLoading] = useCurrency();
     const [securityQuestion, setSecurityQuestion] = useState(securityQuestionOptions[0].value);

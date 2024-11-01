@@ -3,8 +3,6 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface KYCContextType {
   primaryKycData: any;
   setPrimaryKycData: React.Dispatch<React.SetStateAction<any>>;
-  primaryKycResponse: any;
-  setPrimaryKycResponse: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const AuthContext = createContext<KYCContextType | undefined>(undefined);
@@ -15,13 +13,10 @@ interface KYCProviderProps {
 
 const KYCProvider: React.FC<KYCProviderProps> = ({ children }) => {
   const [primaryKycData, setPrimaryKycData] = useState({});
-  const [primaryKycResponse, setPrimaryKycResponse] = useState({});
 
   const value: KYCContextType = {
     primaryKycData,
     setPrimaryKycData,
-    primaryKycResponse,
-    setPrimaryKycResponse,
   };
 
   return (

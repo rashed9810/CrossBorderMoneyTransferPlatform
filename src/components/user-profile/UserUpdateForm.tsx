@@ -102,7 +102,8 @@ const UserUpdateForm = () => {
                     </div>
                     <div>
                         <h3 className="text-xs font-semibold text-[#723EEB]">{name}</h3>
-                        <p className='text-[10px] text-gray-400 mt-4'>{email}</p>
+                        {isKycVerified ? <span className='border border-green-600 text-green-600 text-[10px] px-1 rounded font-semibold'>Verified</span> : <span className='border border-red-600 text-red-600 text-[10px] px-1 rounded font-semibold'>Unverified</span>}
+                        <p className='text-[10px] text-gray-400 mt-2'>{email}</p>
                     </div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className='pt-20'>
@@ -117,7 +118,7 @@ const UserUpdateForm = () => {
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter Country..."
                                 defaultValue={country}
-                                
+
                             />
                         </div>
                         <div className="lg:w-1/2">
@@ -188,7 +189,7 @@ const UserUpdateForm = () => {
                     <div className="w-3/4 mx-auto pb-3 lg:pb-0 lg:mt-5">
                         <button
                             type="submit"
-                            disabled = {isKycVerified && true}
+                            disabled={isKycVerified && true}
                             className={`w-full ${isKycVerified ? 'cursor-not-allowed' : 'cursor-pointer'} bg-[#723EEB] text-white p-1 rounded-[5px] text-sm`}>
                             {loading ? <LoadingSpinner className='h-4 w-4' /> : 'Update'}
                         </button>
