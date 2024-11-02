@@ -16,6 +16,8 @@ import toast from "react-hot-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Wallet } from "lucide-react";
 import DangerAlert from "@/components/ui/DangerAlert";
+import useMainWallet from "@/components/hooks/useMainWallet";
+import useSubWallets from "@/components/hooks/useSubWallets";
 
 const WalletToWalletpage = () => {
   const transferOptions = [
@@ -45,6 +47,8 @@ const WalletToWalletpage = () => {
     setValue,
     formState: { errors, isSubmitted: isFormSubmitted },
   } = useForm<any>();
+  const [mainWallet, mainWalletRefetch] = useMainWallet();
+  const [subWallets, refetch] = useSubWallets();
   const axiosInstance = useAxiosSecure();
   const [transferType, setTransferType] = useState(transferOptions[0].value);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -118,10 +122,10 @@ const WalletToWalletpage = () => {
     }
 
     const walletInfo = {
-      transactionType: transferType,
+      transferType: transferType,
       walletType: wallet?.category,
       amount: parseInt(data?.sendingAmount),
-      recipientsWalletNumber: data.walletNumber,
+      recipientWalletNumber: data.walletNumber,
       walletId: wallet?.id,
     };
 
@@ -142,6 +146,8 @@ const WalletToWalletpage = () => {
         setTransactionPreparedData(preparedRes.data.data);
         setWalletModalOpen(true);
         setIsSubmitted(false);
+        mainWalletRefetch();
+        refetch();
       }
     } catch (error) {
       toast.error((error as any)?.response?.data?.message);

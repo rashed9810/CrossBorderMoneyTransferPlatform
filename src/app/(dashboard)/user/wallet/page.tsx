@@ -106,9 +106,10 @@ const WalletPage = () => {
             <CardSubTitle fontSize='1rem' title='Wallet Balance' />
             <div className='w-full my-5 flex flex-col lg:flex-row lg:max-h-[31rem]  xl:max-h-[32.75rem] gap-5 '>
 
+                
                 {
-                    mainWallet?.userId ? (
-                        isLoading && isFetching ? <Skeleton /> : (
+                    isLoading && isFetching ? <Skeleton /> : (
+                        <>
                             <div className='bg-white rounded-xl w-full min-h-full lg:w-2/4 p-2'>
                                 <div className='flex flex-col h-full'>
                                     <div>
@@ -174,13 +175,10 @@ const WalletPage = () => {
                                     </div>
                                 </div>
                             </div>
-                        )
-                    ) : (
+                        </>
 
-                        <div className='bg-white p-4 rounded-xl lg:w-2/4 overflow-hidden mx-auto w-full h-full'>
-                            <CreateNewWalletForm />
-                        </div>
                     )
+
                 }
 
                 {/* {
@@ -255,11 +253,11 @@ const WalletPage = () => {
                         )
                     )
 
-                }
+                } */}
 
                 <div className='bg-white p-4 rounded-xl lg:w-2/4 overflow-hidden mx-auto w-full h-full'>
                     <CreateNewWalletForm />
-                </div> */}
+                </div>
             </div>
 
 

@@ -10,12 +10,12 @@ import useAxiosSecure from '../hooks/useAxiosSecure';
 import LoadingSpinner from '../LoaderSpinner';
 
 const PrimaryKycForm = () => {
-    const { setPrimaryKycData } = useKYC();
+    const { setPrimaryKycData, setPrimaryKycResponse } = useKYC();
     const [loading, setLoading] = useState(false);
     const [profileFilePath, setProfileFilePath] = useState<string | null>(null);
     const [backProfileFilePath, setBackProfileFilePath] = useState<string | null>(null);
     const [user, refetch] = useUserProfile();
-    const { city, address, phoneNumber, state, zipCode, country, email, fullName } = user;
+    const { city, address, phoneNumber, state, zipCode, country, email, fullName, isKycVerified } = user;
     const axiosInstance = useAxiosSecure();
     const { register, handleSubmit, control, setValue, formState: { errors } } = useForm();
 
@@ -54,9 +54,10 @@ const PrimaryKycForm = () => {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-        }).then(() => {
+        }).then((res) => {
+            setPrimaryKycResponse(res);
             refetch();
-            toast.success("KYC is completed");
+            toast.success("KYC is completed.Please wait for Confirmation");
             setLoading(false);
         }).catch((error) => {
             toast.error(error?.response?.data?.message);
