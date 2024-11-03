@@ -3,6 +3,7 @@ import useUserProfile from '@/components/hooks/useUserProfile';
 import PrimaryKycForm from '@/components/kyc/PrimaryKycForm';
 import SecondaryKycForm from '@/components/kyc/SecondaryKycForm';
 import Topbar from '@/components/Topbar';
+import { useKYC } from '@/context/useKyc';
 import React, { useState } from 'react';
 
 const KYCPage = () => {

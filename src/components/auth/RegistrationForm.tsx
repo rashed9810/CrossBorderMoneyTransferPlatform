@@ -203,11 +203,11 @@ const RegistrationForm = () => {
           </div>
         </div>
 
-        <div className="border-[1.5px] border-[#9747FF] w-full p-2 rounded-xl">
+{/*         <div className="border-[1.5px] border-[#9747FF] w-full p-2 rounded-xl">
           <h4 className="text-[#9747FF] text-xs px-2">
             You Are Referred By Abdul Karim
           </h4>
-        </div>
+        </div> */}
 
         {/* Terms & Conditions Checkbox */}
         <div className="flex items-center text-sm justify-center text-black">

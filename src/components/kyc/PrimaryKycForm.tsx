@@ -14,7 +14,7 @@ const PrimaryKycForm = () => {
     const [profileFilePath, setProfileFilePath] = useState<string | null>(null);
     const [backProfileFilePath, setBackProfileFilePath] = useState<string | null>(null);
     const [user, refetch] = useUserProfile();
-    const { city, address, phoneNumber, state, zipCode, country, email, fullName } = user;
+    const { city, address, phoneNumber, state, zipCode, country, email, fullName, isKycVerified } = user;
     const axiosInstance = useAxiosSecure();
     const { register, handleSubmit, control, setValue, formState: { errors } } = useForm();
 

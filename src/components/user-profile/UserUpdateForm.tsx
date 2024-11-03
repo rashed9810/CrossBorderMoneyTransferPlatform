@@ -118,7 +118,6 @@ const UserUpdateForm = () => {
                                 className={`mt-1 w-full px-3 py-1 text-sm border border-gray-300 rounded-xl focus:outline-none`}
                                 placeholder="Enter Country..."
                                 defaultValue={country}
-
                             />
                         </div>
                         <div className="lg:w-1/2">
