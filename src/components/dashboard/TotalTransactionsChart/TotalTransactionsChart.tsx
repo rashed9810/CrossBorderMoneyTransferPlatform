@@ -1,3 +1,4 @@
+import useTransactionChart from "@/components/hooks/useTransactionChart";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const data = [
@@ -38,6 +39,8 @@ const data = [
 const yValue = data.reduce((acc, cur) => Math.max(acc, cur.Complete, cur.Pending), 0) + 10;
 
 const TotalTransactionsChart = () => {
+    const [transactionChart] = useTransactionChart();
+    // console.log(transactionChart);
     return (
         <div>
             <div className="bg-white pt-6 rounded-xl">
@@ -48,14 +51,14 @@ const TotalTransactionsChart = () => {
                     <ResponsiveContainer minHeight={200} minWidth={200} width="99%" height="100%" aspect={2.3}>
                         <LineChart
                             margin={{ top: 40, right: 10, left: -30, bottom: 0 }}
-                            data={data}>
+                            data={transactionChart}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" axisLine={false} className="text-[8px]" />
                             <YAxis className="text-xs" />
                             <Tooltip />
                             <Legend />
                             <Line type="monotone" dataKey="Pending" stroke="#723eeb" activeDot={{ r: 8 }} />
-                            <Line type="monotone" dataKey="Complete" stroke="#0ac484" />
+                            <Line type="monotone" dataKey="Completed" stroke="#0ac484" />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
@@ -65,14 +68,14 @@ const TotalTransactionsChart = () => {
                     <ResponsiveContainer minHeight={200} minWidth={200} width="99%" height="50%" aspect={1.5}>
                         <LineChart
                             margin={{ top: 40, right: 10, left: -30, bottom: 0 }}
-                            data={data}>
+                            data={transactionChart}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" axisLine={false} className="text-[8px]" />
                             <YAxis className="text-xs" />
                             <Tooltip />
                             <Legend />
                             <Line type="monotone" dataKey="Pending" stroke="#723eeb" activeDot={{ r: 8 }} />
-                            <Line type="monotone" dataKey="Complete" stroke="#0ac484" />
+                            <Line type="monotone" dataKey="Completed" stroke="#0ac484" />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>

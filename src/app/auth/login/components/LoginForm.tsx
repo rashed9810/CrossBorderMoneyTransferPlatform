@@ -73,11 +73,11 @@ const LoginForm = () => {
 
       }
     } catch (error: any) {
-      if (error.response && error.response.status === 403) {
+      if (error.response && error.response?.status === 403) {
         setServerError("Invalid email or password");
         toast.error("Invalid email or password");
       }
-      else if (error.response.status === 404) {
+      else if (error.response?.status === 404) {
         setServerError("Invalid email or password");
         toast.error("Invalid email or password");
       } else {
