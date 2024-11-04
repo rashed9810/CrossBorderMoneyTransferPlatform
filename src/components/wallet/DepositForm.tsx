@@ -60,7 +60,7 @@ const DepositForm: React.FC<ModalProps> = ({ handleForgetPIN, setDepositModalOpe
             }
         } catch (error: any) {
             if (error) {
-                toast.error("Your PIN is wrong");
+                toast.error(error?.response?.data?.message);
                 reset();
             }
         }

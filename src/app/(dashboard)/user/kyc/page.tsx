@@ -1,4 +1,5 @@
 'use client'
+import useUserProfile from '@/components/hooks/useUserProfile';
 import PrimaryKycForm from '@/components/kyc/PrimaryKycForm';
 import SecondaryKycForm from '@/components/kyc/SecondaryKycForm';
 import Topbar from '@/components/Topbar';
@@ -7,8 +8,9 @@ import React, { useState } from 'react';
 
 const KYCPage = () => {
     const [kycForm, setKycForm] = useState<string>('primary');
-    const { primaryKycResponse } = useKYC();
-    console.log(primaryKycResponse);
+    const [user] = useUserProfile();
+    const kycStatus = user?.kyc?.kycStatus;
+
     const handleKYC = (props: 'primary' | 'secondary') => {
         if (props === 'primary') {
             setKycForm('primary')
@@ -23,24 +25,25 @@ const KYCPage = () => {
             <div className='pt-10 bg-white rounded-[10px] my-5'>
 
                 {
-                    primaryKycResponse?.message === 'Your KYC is pending approval. Please wait.' ? 'Your KYC is pending approval. Please wait.' : (
-                        <>
-                            <div className='flex flex-row justify-center items-center gap-2 border-b border-black text-sm font-bold'>
-                                <button className={`${kycForm === 'primary' ? 'border-x border-t border-black p-1' : ''}`}
-                                    onClick={() => handleKYC('primary')}>Primary KYC</button>
+                    kycStatus === 'PENDING' ? <div className='h-[70vh] flex justify-center items-center'><h3>Your KYC is pending approval. Please wait.</h3></div> : (
+                        user?.isKycVerified ? <div className='h-[70vh] flex justify-center items-center'><h3>You KYC is approved</h3></div> :
+                            <>
+                                <div className='flex flex-row justify-center items-center gap-2 border-b border-black text-sm font-bold'>
+                                    <button className={`${kycForm === 'primary' ? 'border-x border-t border-black p-1' : ''}`}
+                                        onClick={() => handleKYC('primary')}>Primary KYC</button>
 
-                                {/* <button className={`${kycForm === 'secondary' ? 'border-x border-t border-black p-1' : ''}`}
+                                    {/* <button className={`${kycForm === 'secondary' ? 'border-x border-t border-black p-1' : ''}`}
                         onClick={() => handleKYC('secondary')}>Secondary KYC</button> */}
-                            </div>
-                            <div>
-                                {
-                                    kycForm === 'primary' && <PrimaryKycForm />
-                                }
-                                {/* {
+                                </div>
+                                <div>
+                                    {
+                                        kycForm === 'primary' && <PrimaryKycForm />
+                                    }
+                                    {/* {
                         kycForm === 'secondary' && <SecondaryKycForm />
                     } */}
-                            </div>
-                        </>
+                                </div>
+                            </>
                     )
                 }
 

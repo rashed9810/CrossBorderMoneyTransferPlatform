@@ -17,7 +17,8 @@ const VerifyEmail = () => {
             try {
                 setIsLoading(true);
                 const response = await fetch(
-                    `http://209.74.71.58:5000/api/v1/auth/verify-email?token=${token}`,
+                    // `http://209.74.71.58:5000/api/v1/auth/verify-email?token=${token}`,
+                    `https://dev-api-backend.diasporex.io:5000/api/v1/auth/verify-email?token=${token}`,
                     {
                         method: 'POST',
                         headers: {
