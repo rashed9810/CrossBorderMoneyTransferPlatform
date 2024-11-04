@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 // const BASE_API = 'https://diasporex-api.vercel.app/api/v1';
-const BASE_API = 'http://209.74.71.58:5000/api/v1';
+const BASE_API = 'https://dev-api-backend.diasporex.io:5000/api/v1';
 const axiosInstance = axios.create({
     baseURL: BASE_API
 });
