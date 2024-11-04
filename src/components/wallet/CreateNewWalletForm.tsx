@@ -98,6 +98,7 @@ const CreateNewWalletForm = () => {
     const [currencyOptions, setCurrencyOptions] = useState([]);
     const [selectCurrency, setSelectCurrency] = useState({} as any);
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+    
 
 
     const onSubmit = async (data: any) => {

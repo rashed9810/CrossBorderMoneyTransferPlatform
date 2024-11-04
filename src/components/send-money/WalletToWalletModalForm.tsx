@@ -12,11 +12,15 @@ import openEye from '../../../public/svg/openEye.svg';
 export interface TransactionPreparedTypes {
     id: string,
     amount: number,
+    convertedAmount: number,
+    recipientName: string;
     recipientWalletNumber: string;
+    receivingCurrencySymbol: string;
     transactionBeforeBalance: number;
     transactionAfterBalance: number;
     walletType: string;
     currencySymbol: string;
+
 
     
 }
@@ -75,6 +79,8 @@ const WalletToWalletModalForm = ({ transferInfo, currencySymbol, setWalletModalO
             <div className='mt-1 mb-2 space-y-1 font-semibold text-sm'>
                 <h5>Transfer Wallet: {transferInfo?.walletType}</h5>
                 <h5>Transfer Amount: {transferInfo?.amount}{ transferInfo?.currencySymbol}</h5>
+                <h5>Receiving Amount: {transferInfo?.amount}{ transferInfo?.convertedAmount}{ transferInfo?.receivingCurrencySymbol}</h5>
+                <h5>Recipients Name: {transferInfo?.recipientName}</h5>
                 
                 <h5>Recipients Wallet ID: {transferInfo?.recipientWalletNumber}</h5>
             </div>
