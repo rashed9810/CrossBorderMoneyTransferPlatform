@@ -5,6 +5,8 @@ import Topbar from '@/components/Topbar';
 import SendMoneyLog from '@/components/dashboard/SendMoneyLog/SendMoneyLog';
 import TotalTransactionsChart from '@/components/dashboard/TotalTransactionsChart/TotalTransactionsChart';
 import Wallet from '@/components/dashboard/Wallet/Wallet';
+import useDashboardCards from '@/components/hooks/useDashboardCards';
+import useTransactionChart from '@/components/hooks/useTransactionChart';
 
 
 // const Page = () => {
@@ -39,6 +41,8 @@ import Wallet from '@/components/dashboard/Wallet/Wallet';
 // }
 
 const Page = () => {
+    const [transactionChart] = useTransactionChart();
+    console.log(transactionChart);
     return (
         <div className='min-h-[calc(100vh-100px)]'>
             <Topbar>Dashboard</Topbar>

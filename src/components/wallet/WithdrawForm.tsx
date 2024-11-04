@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
@@ -21,12 +21,33 @@ interface FormData {
 
 const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalOpen }) => {
     const [loading, setLoading] = useState(false);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+    const [amountAlert, setAmountAlert] = useState(false);
+    const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<FormData>();
     const [pin, setPin] = useState(false);
     const [mainWallet, mainWalletRefetch] = useMainWallet();
     const axiosInstance = useAxiosSecure();
 
+    const sendingAmount = watch("amount");
+
+    useEffect(() => {
+        if (sendingAmount) {
+            const amount = parseFloat(sendingAmount);
+
+            if (!mainWallet?.balance || amount > mainWallet.balance) {
+                setAmountAlert(true);
+            } else {
+                setAmountAlert(false);
+            }
+        } else {
+
+            setAmountAlert(false);
+        }
+    }, [sendingAmount, mainWallet?.balance]);
+
     const onSubmit = async (data: any) => {
+        if(mainWallet?.balance < data?.amount){
+            return setAmountAlert(true);
+        }
         const withdrawInfo = {
             amount: parseFloat(data.amount),
             bankName: data.bankName,
@@ -71,6 +92,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
                         type="number"
                         {...register("amount", {
                             required: "Amount is required",
+                            pattern: /^[0-9]*$/
                         })}
                         className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none font-semibold text-[14px]`}
                         placeholder="Enter Amount Here....."
@@ -79,6 +101,11 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
                         <p className="text-red-500 text-xs">{errors.amount.message}</p>
                     )}
                 </div>
+                {amountAlert && (
+                    <div className='border border-red-600 w-full p-2 rounded bg-[#fef2f2] transition-all duration-500'>
+                        <h3 className='text-red-500 text-xs xl:text-sm'>Insufficient Balance. Please reduce your balance.</h3>
+                    </div>
+                )}
                 {/* Bank name Field */}
                 <div className="mb-3">
                     <label className="text-[14px]">Enter Bank Name</label>
@@ -126,7 +153,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
                 </div>
                 {/* Pin Field */}
                 <div className="mb-3">
-                    <label className="text-gray-600 text-sm">Enter Your PIN</label>
+                    <label className=" text-[14px]">Enter Your PIN</label>
                     <div className="relative">
                         <input
                             type={pin ? 'text' : 'password'}
@@ -135,7 +162,7 @@ const WithdrawForm: React.FC<ModalProps> = ({ handleForgetPIN, setWithdrawModalO
                                 minLength: 4,
                                 pattern: /^[0-9]*$/
                             })}
-                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-[10px] focus:outline-none placeholder:text-xs text-sm`}
+                            className={`mt-1 w-full px-3 py-1 border border-gray-400 rounded-2xl focus:outline-none placeholder:text-xs text-sm`}
                             placeholder="Enter PIN...."
                         />
                         <span

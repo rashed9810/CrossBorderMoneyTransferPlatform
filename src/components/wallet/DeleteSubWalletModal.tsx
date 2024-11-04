@@ -33,11 +33,11 @@ const DeleteSubWalletModal: React.FC<ModalProps> = ({ isDeleteSubWalletModalOpen
     const onSubmit = async (data: any) => {
         const pin = {
             pinNumber: Number(data.confirmPin)
-        } as any;
+        };
         setLoading(true);
-
+        console.log(pin);
         try {
-            const res = await axiosInstance.post(`/wallet/delete-wallet/${subWalletData?.id}`, pin);
+            const res = await axiosInstance.delete(`/wallet/delete-wallet/${subWalletData?.id}`, { data: pin });
 
             if (res.status === 200) {
                 toast.success('Wallet deleted successfully');
@@ -46,7 +46,7 @@ const DeleteSubWalletModal: React.FC<ModalProps> = ({ isDeleteSubWalletModalOpen
             }
         } catch (error: any) {
             if (error) {
-                toast.error('There is something error');
+                toast.error(error?.response?.data?.message);
             }
         }
         setLoading(false);

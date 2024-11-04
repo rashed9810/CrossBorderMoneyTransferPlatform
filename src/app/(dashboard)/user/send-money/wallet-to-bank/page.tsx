@@ -7,12 +7,12 @@ import CurrencyDropdown from '@/components/common/dropdown/CurrencyDropdown';
 import SelectDropdown from '@/components/common/dropdown/SelectDropdown';
 import SendMoneyModal from '@/components/common/sendMoneyModal/SendMoneyModal';
 import useAxiosSecure from '@/components/hooks/useAxiosSecure';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AlertCircle, Wallet } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
-
 
 
 const WalletToBankPage: React.FC = () => {
@@ -42,7 +42,7 @@ const WalletToBankPage: React.FC = () => {
   const [sendingAmount, setSendingAmount] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-
+  console.log(walletOptions);
 
   // fetching data from the server
 
@@ -192,6 +192,19 @@ const WalletToBankPage: React.FC = () => {
             isSubmitted={isSubmitted}
             loadDataEmptyMassage='*Please Create a Wallet and Deposit money!'
           />
+          {wallet?.walletId && (
+            <Alert className="mt-4 mb-2 border-[#723EEB] bg-[#723EEB]/10 rounded-[10px]">
+              <Wallet className="h-4 w-4 text-[#723EEB]" />
+              <AlertTitle className="text-[#723EEB]">Current Balance</AlertTitle>
+              <AlertDescription className="mt-1">
+                Your {wallet?.category === "PRIMARY" ? "Main" : "Sub"} wallet balance
+                is{" "}
+                <span className="font-semibold text-[#723EEB] rounded-lg">
+                  {wallet?.balance} {wallet?.currency?.code}
+                </span>
+              </AlertDescription>
+            </Alert>
+          )}
           <CurrencyDropdown
             label="Sending Currency"
             options={currencyOptions}
@@ -222,8 +235,24 @@ const WalletToBankPage: React.FC = () => {
               value={sendingAmount}
               onChange={(e) => setSendingAmount(e.target.value)}
               className="w-full px-3 py-2 text-xs border rounded-[10px] focus:outline-none"
+              min={0}
               placeholder="Type Amount....."
             />
+            {sendingAmount > wallet?.balance && (
+              <Alert
+                variant="destructive"
+                className="mt-4 mb-2 border border-red-500 bg-red-50 rounded-[10px]"
+              >
+                <AlertCircle className="h-4 w-4 text-red-500" />
+                <AlertTitle className="text-red-500 text-xs xl:text-sm">
+                  Insufficient Balance
+                </AlertTitle>
+                <AlertDescription className="mt-1 text-xs">
+                  The amount exceeds your available balance of {wallet?.balance}{" "}
+                  {wallet?.currency?.code}. {wallet?.balance === 0 ? 'Please deposit in your wallet' : 'Please enter a lower amount.'}
+                </AlertDescription>
+              </Alert>
+            )}
             {
               isSubmitted && sendingAmount === '' && <p className='text-red-500 font-medium text-xs'>Amount is required</p>
             }
