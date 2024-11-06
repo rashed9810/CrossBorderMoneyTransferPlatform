@@ -308,7 +308,7 @@ const WalletPage = () => {
                                                             </div>
                                                         </div>
                                                         <div className="font-semibold text-right text-xs lg:text-sm">
-                                                            <h3 className="text-green-500">{data?.amount} {data?.wallet?.currency.symbol}</h3>
+                                                            <h3 className="text-green-500">{data?.amount} {data?.wallet?.currency?.symbol}</h3>
                                                             <p className="text-[10px]">Transaction ID : {data?.transactionId}</p>
                                                         </div>
                                                     </div>
@@ -354,7 +354,7 @@ const WalletPage = () => {
                                                             </div>
                                                         </div>
                                                         <div className="font-semibold text-right text-xs lg:text-sm">
-                                                            <h3 className="text-red-500">{data?.amount} {data?.wallet?.currency.symbol}</h3>
+                                                            <h3 className="text-red-500">{data?.amount} {data?.wallet?.currency?.symbol}</h3>
                                                             <p className="text-[10px]">Account Number : {data?.accountNo}</p>
                                                         </div>
                                                     </div>
