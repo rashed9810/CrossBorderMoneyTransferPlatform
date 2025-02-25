@@ -42,8 +42,8 @@ DiasporeX is a financial platform that facilitates secure and seamless transacti
 ### Backend Setup
 1. Clone the repository:
    ```sh
-   git clone https://github.com/rashed9810/diasporex.git
-   cd diasporex
+   git clone https://github.com/rashed9810/CrossBorderMoneyTransferPlatform.git
+   cd CrossBorderMoneyTransferPlatform
    ```
 2. Install dependencies:
    ```sh
@@ -96,4 +96,3 @@ This project is licensed under the MIT License.
 
 ---
 🚀 **DiasporeX** – Secure and seamless transactions for everyone.
-```
