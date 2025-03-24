@@ -1,4 +1,4 @@
-#  [DiasporeX User ](https://diasporex.io/)
+#  [DiasporeX](https://diasporex.io/)
 
 ## Overview
 DiasporeX is a financial platform that facilitates secure and seamless transactions between users, banks, and agents. The system comprises a **Next.js**-powered frontend and a robust **Node.js** backend using **Prisma** for database management.
